@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
 
 namespace PixelCrew
 {
@@ -6,10 +7,10 @@ namespace PixelCrew
     {
         [SerializeField] private float _speed;
     
-        private float _direction;
+        private Vector2 _direction;
     
     
-        public void SetDirection(float direction)
+        public void SetDirection(Vector2 direction)
         {
             _direction = direction;
         }
@@ -21,11 +22,10 @@ namespace PixelCrew
     
         private void Update()
         {
-            if (_direction != 0)
+            if (_direction != Vector2.zero)
             {
-                float delta = _direction * _speed * Time.deltaTime;
-                float newXPosition = transform.position.x + delta;
-                transform.position = new Vector3(newXPosition,transform.position.y, transform.position.z);
+                Vector3 delta = new Vector3(_direction.x, _direction.y, 0) * _speed * Time.deltaTime;
+                transform.position += delta;
             }
         }
     }

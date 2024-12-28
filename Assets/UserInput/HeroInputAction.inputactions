@@ -6,10 +6,10 @@
             "id": "bf16d0c0-172b-4b79-a87a-1b3db5c95243",
             "actions": [
                 {
-                    "name": "HorizontalMovement",
-                    "type": "Button",
+                    "name": "Movement",
+                    "type": "Value",
                     "id": "ccc1120d-27c3-4620-95a5-8b8adf88020a",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 },
@@ -26,33 +26,55 @@
                 {
                     "name": "Keyboard",
                     "id": "68b1ccc6-de47-42eb-a506-4fba3fc621ba",
-                    "path": "1DAxis",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HorizontalMovement",
+                    "action": "Movement",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
+                    "name": "left",
                     "id": "cbd41a78-43fb-4a4c-b58e-8552a4046c0e",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HorizontalMovement",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
+                    "name": "right",
                     "id": "9c77e3f6-335d-4834-843d-41a2fc867b56",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HorizontalMovement",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "up",
+                    "id": "3c61610a-1bad-4a11-9ed1-37534d642f4c",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "7bce7a21-bc76-42e9-8c09-fc36aaabbb1a",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
