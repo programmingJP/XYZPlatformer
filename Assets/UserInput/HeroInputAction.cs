@@ -72,7 +72,7 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 {
                     ""name"": ""up"",
                     ""id"": ""3c61610a-1bad-4a11-9ed1-37534d642f4c"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
