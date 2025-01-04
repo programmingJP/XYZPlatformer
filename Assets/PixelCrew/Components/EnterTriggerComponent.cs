@@ -1,0 +1,19 @@
+﻿using UnityEngine;
+using UnityEngine.Events;
+
+namespace PixelCrew.Components
+{
+    //Реализация реалоада уровня на компонентной основе
+    public class EnterTriggerComponent : MonoBehaviour
+    {
+        [SerializeField] private string _tag;
+        [SerializeField] private UnityEvent _action;
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.CompareTag(_tag))
+            {
+                _action?.Invoke(); //сокращенная проверка на null _action?.Invoke(); работает для любых методов и классов которые могут принимать значение null
+            }
+        }
+    }
+}
