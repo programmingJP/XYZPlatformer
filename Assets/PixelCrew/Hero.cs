@@ -28,6 +28,8 @@ namespace PixelCrew
         [SerializeField] private float _groundCheckRadius;
         [SerializeField] private Vector3 _groundCheckPositionDelta;
 
+        private int _coins;
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -121,6 +123,12 @@ namespace PixelCrew
         public void SaySomething()
         {
             Debug.Log("Hello!");
+        }
+
+        public void AddCoins(int coins)
+        {
+            _coins += coins;
+            Debug.Log($"Coins: {_coins}");
         }
     }
 }

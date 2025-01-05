@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8774529144163090746}
   - component: {fileID: 2614620597187662295}
   - component: {fileID: 6864568754432539818}
+  - component: {fileID: 2370958116675115686}
   - component: {fileID: 7198308456887891493}
   - component: {fileID: 9023847870544986610}
   m_Layer: 0
@@ -129,6 +130,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2370958116675115686}
+        m_MethodName: Add
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2370958116675115686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404035507130366741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 683b47db37c9c5d48820858d178e02b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coinsToAdd: 1
 --- !u!114 &7198308456887891493
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2806,6 +2806,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &975749425 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2370958116675115686, guid: 579c7d598e8cb6744832de186be2324d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1688427586}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 683b47db37c9c5d48820858d178e02b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1106494621 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1173799678456748363, guid: 579c7d598e8cb6744832de186be2324d,
@@ -3204,6 +3216,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864568754432539818, guid: 579c7d598e8cb6744832de186be2324d,
+        type: 3}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864568754432539818, guid: 579c7d598e8cb6744832de186be2324d,
+        type: 3}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 975749425}
+    - target: {fileID: 6864568754432539818, guid: 579c7d598e8cb6744832de186be2324d,
+        type: 3}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Add
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864568754432539818, guid: 579c7d598e8cb6744832de186be2324d,
+        type: 3}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5507156395287620663, guid: 579c7d598e8cb6744832de186be2324d, type: 3}
