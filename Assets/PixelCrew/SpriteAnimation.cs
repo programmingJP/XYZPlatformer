@@ -26,6 +26,16 @@ namespace PixelCrew
             _nextFrameTime =  Time.time + _secondsPerFrame; //Текущее время + количество времени на фрейм. Определяем на старте
         }
 
+        private void OnBecameVisible()
+        {
+            enabled = _isPlaying;
+        }
+
+        private void OnBecameInvisible()
+        {
+            enabled = false;
+        }
+
         private void Update()
         {
             if (!_isPlaying || _nextFrameTime > Time.time) return;
