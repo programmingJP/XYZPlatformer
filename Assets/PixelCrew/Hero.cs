@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PixelCrew.Components;
+using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
 namespace PixelCrew
@@ -26,12 +27,15 @@ namespace PixelCrew
         
         //Параметр для всех методов детекта кроме третьего, так как мы его указали в самом компоненте
         [SerializeField] private LayerMask _groundLayer;
-        
-        //Параметры для третьего метода детекта
 
         //Параметры для рейкаст сферы
         [SerializeField] private float _groundCheckRadius;
         [SerializeField] private Vector3 _groundCheckPositionDelta;
+        
+        //Параметры для интеракта
+        [SerializeField] private float _interactionRadius;
+        [SerializeField] private LayerMask _interactionLayer;
+        private Collider2D[] _interactionResult = new Collider2D[1]; //массив коллайдеров c инециализацией одного значения в массиве
 
         private int _coins;
 
@@ -175,6 +179,25 @@ namespace PixelCrew
         {
             _animator.SetTrigger(Hit);
             _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _damageJumpForce); //сила при получении урона, чтобы герой чуть подлетел
+        }
+
+        public void Interact()
+        {
+            // OverlapCircleNonAlloc позволяет получить пересекающиеся обьекты, но он будет выделять лишней памяти
+            var size = Physics2D.OverlapCircleNonAlloc(  //создает сферу
+                transform.position,  // позиция сферы
+                _interactionRadius, // радиус сферы
+                _interactionResult, //записывает результаты в этот массив и возращает нам размер этого массива
+                _interactionLayer);
+            //если не один из элементов не вернется по подходящим условиям то массив будет 0
+            for (int i = 0; i < size; i++)
+            {
+               var interactable =_interactionResult[i].GetComponent<InteractableComponent>();
+               if (interactable != null)
+               {
+                   interactable.Interact(); //Переходим в InteractableComponent и вызываем экшен
+               }
+            }
         }
     }
 }
