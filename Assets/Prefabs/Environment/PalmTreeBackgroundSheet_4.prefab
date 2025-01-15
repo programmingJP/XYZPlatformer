@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4706803035391272283}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -18.81, y: 0.86, z: 2.0176513}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -96,12 +96,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _frameRate: 10
-  _loop: 1
-  _sprites:
-  - {fileID: -2645899244835350471, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
-  - {fileID: -6487789065682943626, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
-  - {fileID: 1981876992937066421, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
-  - {fileID: 7744047822205964645, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
-  _onComplete:
-    m_PersistentCalls:
-      m_Calls: []
+  _clips:
+  - _name: idle
+    _sprites:
+    - {fileID: -2645899244835350471, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
+    - {fileID: -6487789065682943626, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
+    - {fileID: 1981876992937066421, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
+    - {fileID: 7744047822205964645, guid: cd44092a78148c84682fe9d7a538945b, type: 3}
+    _loop: 1
+    _allowNextClip: 0
+    _onComplete:
+      m_PersistentCalls:
+        m_Calls: []

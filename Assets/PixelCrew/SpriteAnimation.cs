@@ -7,23 +7,25 @@ namespace PixelCrew
     [RequireComponent(typeof(SpriteRenderer))]
     public class SpriteAnimation : MonoBehaviour
     {
-        [SerializeField] private int _frameRate;
-        [SerializeField] private bool _loop;
-        [SerializeField] private Sprite[] _sprites;
-        [SerializeField] private UnityEvent _onComplete;
+        [SerializeField] [Range(1, 30)] private int _frameRate = 10;
+        [SerializeField] private UnityEvent<string> _onComplete;
+        [SerializeField] private AnimationClip[] _clips;
 
         private SpriteRenderer _renderer;
+        
         private float _secondsPerFrame;
-        private int _currentSpriteIndex; //Номер текущего спрайта
         private float _nextFrameTime; //Время когда мы должны обновить наш спрайт
-
+        private int _currentFrame; //Номер текущего спрайта
         private bool _isPlaying = true;
+
+        private int _currentClip;
 
         private void Start()
         {
             _renderer = GetComponent<SpriteRenderer>();
             _secondsPerFrame = 1f / _frameRate; //В одну секунду из одной секунды у нас получится наша переменная
-            _nextFrameTime =  Time.time + _secondsPerFrame; //Текущее время + количество времени на фрейм. Определяем на старте
+
+            StartAnimation();
         }
 
         private void OnBecameVisible()
@@ -36,30 +38,77 @@ namespace PixelCrew
             enabled = false;
         }
 
-        private void Update()
+        public void SetClip(string clipName)
         {
-            if (!_isPlaying || _nextFrameTime > Time.time) return;
-            
-            if (_currentSpriteIndex >= _sprites.Length) //Если мы вышли за граници массива
+            for (int i = 0; i < _clips.Length; i++)
             {
-                if (_loop) //Если у нас стоит луп, значит проигрываем анимацию с нуля (сбрасываем текущий спрайт индекс)
+                if (_clips[i].Name == clipName)
                 {
-                    _currentSpriteIndex = 0;
-                }
-                else //Если не луп и конец нашего списка спрайтов, то мы выходим, чтобы не зайти в следующий блок
-                {
-                    _isPlaying = false;
-                    _onComplete?.Invoke();
+                    _currentClip = i;
+                    StartAnimation();
                     return;
                 }
             }
-            
-            _renderer.sprite = _sprites[_currentSpriteIndex]; //Если наступило время сменить кадр, то мы берем и назначаем нужный нам кадр
-            _nextFrameTime += _secondsPerFrame; //Обновляем время следующего апдейта кадра
-            _currentSpriteIndex++; //В следующий раз мы поставим следующий кадр
-            {
-                
-            }
+            enabled = _isPlaying = false;
         }
+
+        private void StartAnimation()
+        {
+            _nextFrameTime = Time.time + _secondsPerFrame;
+            _isPlaying = true;
+            _currentFrame = 0;
+        }
+
+        private void OnEnable()
+        {
+            _nextFrameTime = Time.time + _secondsPerFrame;
+        }
+
+        private void Update()
+        {
+            if (_nextFrameTime > Time.time) return;
+
+            var clip = _clips[_currentClip];
+            if (_currentFrame >= clip.Sprites.Length)
+            {
+                if (clip.Loop)
+                {
+                    _currentFrame = 0;
+                }
+                else
+                {
+                    clip.OnComplete?.Invoke();
+                    _onComplete?.Invoke(clip.Name);
+                    enabled = _isPlaying = clip.AllowNextClip;
+                    if (clip.AllowNextClip)
+                    {
+                        _currentFrame = 0;
+                        _currentClip = (int)Mathf.Repeat(_currentClip + 1, _clips.Length);
+                    }
+                }
+                return;
+            }
+
+            _renderer.sprite = clip.Sprites[_currentFrame];
+            
+            _nextFrameTime += _secondsPerFrame;
+            _currentFrame++;
+        }
+    }
+
+    [Serializable]
+    public class AnimationClip
+    {
+        [SerializeField] private string _name;
+        [SerializeField] private Sprite[] _sprites;
+        [SerializeField] private bool _loop;
+        [SerializeField] private bool _allowNextClip;
+        [SerializeField] private UnityEvent _onComplete;
+        
+        public string Name => _name;
+        public Sprite[] Sprites => _sprites;
+        public bool Loop => _loop;
+        public bool AllowNextClip => _allowNextClip;
+        public UnityEvent OnComplete => _onComplete;
     }
 }

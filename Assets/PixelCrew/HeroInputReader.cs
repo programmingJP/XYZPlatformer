@@ -7,6 +7,7 @@ namespace PixelCrew
    public class HeroInputReader : MonoBehaviour
    {
       [SerializeField] private Hero _hero;
+      
       public void OnMovement(InputAction.CallbackContext context)
       {
          Vector2 direction = context.ReadValue<Vector2>();
@@ -35,6 +36,5 @@ namespace PixelCrew
             _hero.SaySomething();
          }
       }
-   
    }
 }

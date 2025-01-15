@@ -15,9 +15,9 @@ namespace PixelCrew
         private Rigidbody2D _rigidbody;
         private Vector2 _direction;
         private Animator _animator;
-        private SpriteRenderer _sprite;
         private bool _isGrounded;
         private bool _allowDoubleJump;
+        private bool _isJumping;
         
         //Переводим строки в хэш и записываем в "константы" переменные
         private static readonly int IsGroundKey = Animator.StringToHash("is-ground");
@@ -31,6 +31,9 @@ namespace PixelCrew
         //Параметры для рейкаст сферы
         [SerializeField] private float _groundCheckRadius;
         [SerializeField] private Vector3 _groundCheckPositionDelta;
+
+        [SerializeField] private SpawnComponent _footStepsParticles;
+        [SerializeField] private ParticleSystem _hitParticles;
         
         //Параметры для интеракта
         [SerializeField] private float _interactionRadius;
@@ -43,7 +46,6 @@ namespace PixelCrew
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
-            _sprite = GetComponent<SpriteRenderer>();
         }
 
         private void FixedUpdate()
@@ -67,13 +69,18 @@ namespace PixelCrew
             
             bool isJumpPressing = _direction.y > 0;
 
-            if (_isGrounded) _allowDoubleJump = true; //если мы стоим на земле, то разрешаем двойной прыжок
+            if (_isGrounded)
+            {
+                _allowDoubleJump = true; //если мы стоим на земле, то разрешаем двойной прыжок
+                _isJumping = false;
+            }
 
             if (isJumpPressing) //если мы нажимаем прыжок, то начинаем расчет прыжка
             {
+                _isJumping = true;
                 yVelocity = CalculateJumpVelocity(yVelocity);
             }
-            else if (_rigidbody.velocity.y > 0) // иначе мы уменьшаем скорость, чтобы у нас регулировалась высота прыжка
+            else if (_rigidbody.velocity.y > 0 && _isJumping) // иначе мы уменьшаем скорость, чтобы у нас регулировалась высота прыжка
             {
                 yVelocity *= 0.5f;
             }
@@ -106,11 +113,11 @@ namespace PixelCrew
         {
             if (_direction.x > 0)
             {
-                _sprite.flipX = false;
+                transform.localScale = Vector3.one;
             }
             else if (_direction.x < 0)
             {
-                _sprite.flipX = true;
+                transform.localScale = new Vector3(-1, 1, 1);
             }
         }
 
@@ -177,8 +184,27 @@ namespace PixelCrew
 
         public void TakeDamage()
         {
+            _isJumping = false;
             _animator.SetTrigger(Hit);
             _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _damageJumpForce); //сила при получении урона, чтобы герой чуть подлетел
+
+            if (_coins > 0)
+            {
+                SpawnCoins();
+            }
+        }
+
+        private void SpawnCoins()
+        {
+            var numCoinsToDispose = Mathf.Min(_coins, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
+            _coins -= numCoinsToDispose; //обновляем количество коинов, которое остается после хита
+
+            var burst = _hitParticles.emission.GetBurst(0); //получаем бурст из эмиссии
+            burst.count = numCoinsToDispose; //передаем количество коинов которое надо выкинуть
+            _hitParticles.emission.SetBurst(0, burst); //ставим обратно наш бюрст в нужный индекс
+            
+            _hitParticles.gameObject.SetActive(true); //включаем эффект
+            _hitParticles.Play(); //проигрываем эффект
         }
 
         public void Interact()
@@ -198,6 +224,11 @@ namespace PixelCrew
                    interactable.Interact(); //Переходим в InteractableComponent и вызываем экшен
                }
             }
+        }
+
+        public void SpawnFootDust()
+        {
+            _footStepsParticles.Spawn();
         }
     }
 }
