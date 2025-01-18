@@ -33,6 +33,7 @@ namespace PixelCrew
         [SerializeField] private Vector3 _groundCheckPositionDelta;
 
         [SerializeField] private SpawnComponent _footStepsParticles;
+        [SerializeField] private SpawnComponent _jumpParticles;
         [SerializeField] private ParticleSystem _hitParticles;
         
         //Параметры для интеракта
@@ -98,10 +99,12 @@ namespace PixelCrew
             if (_isGrounded) //если мы на земле тогда мы просто прыгаем
             {
                 yVelocity += _jumpForce;
+                _jumpParticles.Spawn();
             }
             else if (_allowDoubleJump) //если нам доступен двойной пыжок, то совершаем двойной прыжок и запрещаем его повторное использование
             {
                 yVelocity = _jumpForce;
+                _jumpParticles.Spawn();
                 _allowDoubleJump = false; //сбрасываем флаг
             }
             
