@@ -1,5 +1,7 @@
-﻿using PixelCrew.Components;
+﻿using System.Collections;
+using PixelCrew.Components;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vector2 = UnityEngine.Vector2;
 
 namespace PixelCrew
@@ -42,6 +44,13 @@ namespace PixelCrew
         private Collider2D[] _interactionResult = new Collider2D[1]; //массив коллайдеров c инециализацией одного значения в массиве
 
         private int _coins;
+        
+        //TODO DASH
+        [SerializeField] private float _dashDuration;
+        [SerializeField] private float _dashForce;
+        [SerializeField] private float _dashCooldown;
+        private bool _isDashing;
+        private bool _canDash = true;
 
         private void Awake()
         {
@@ -55,8 +64,7 @@ namespace PixelCrew
             float yVelocity = CalculateYVelocity(); //считаем y  координату
             
             _rigidbody.velocity = new Vector2(xVelocity, yVelocity);
-            
-            
+
             _animator.SetBool(IsGroundKey, _isGrounded);
             _animator.SetBool(IsRunning, _direction.x != 0); //если направление х не равно нулю, то будет true
             _animator.SetFloat(VerticalVelocity, _rigidbody.velocity.y);
@@ -232,6 +240,31 @@ namespace PixelCrew
         public void SpawnFootDust()
         {
             _footStepsParticles.Spawn();
+        }
+
+        public void Dash()
+        {
+            if (!_canDash || _isDashing) return;
+            
+            if (!_isGrounded) StartCoroutine(PerformDash());
+
+        }
+
+        private IEnumerator PerformDash()
+        {
+            _canDash = false;
+            _isDashing = true;
+
+            float originalSpeed = _speed;
+            _speed = _dashForce;
+
+            yield return new WaitForSeconds(_dashDuration);
+
+            _speed = originalSpeed; 
+            _isDashing = false;
+
+            yield return new WaitForSeconds(_dashCooldown); 
+            _canDash = true;
         }
     }
 }

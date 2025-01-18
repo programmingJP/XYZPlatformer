@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace PixelCrew.Components
@@ -9,11 +8,6 @@ namespace PixelCrew.Components
         [SerializeField] private int _health;
         [SerializeField] private UnityEvent _onDamage;
         [SerializeField] private UnityEvent _onDie;
-
-        private void Update()
-        {
-            Debug.Log(_health); //для отслеживания хп //TODO Убрать
-        }
 
         public void ApplyDamage(int damageValue)
         {
@@ -29,6 +23,7 @@ namespace PixelCrew.Components
         public void ApplyHeal(int healValue)
         {
             _health += healValue;
+            Debug.Log($"Health : {_health}");
         }
     }
 }
