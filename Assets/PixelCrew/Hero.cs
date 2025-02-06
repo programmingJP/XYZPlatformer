@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using PixelCrew.Components;
+using PixelCrew.Utils;
+using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Vector2 = UnityEngine.Vector2;
 
 namespace PixelCrew
@@ -11,6 +14,8 @@ namespace PixelCrew
         [SerializeField] private float _speed;
         [SerializeField] private float _jumpForce;
         [SerializeField] private float _damageJumpForce;
+        [SerializeField] private float _slamDownVelocity;
+        [SerializeField] private int _damage;
         
         //[SerializeField] private LayerCheck _groundCheck; для отдельного скрипта чекера
         
@@ -26,6 +31,7 @@ namespace PixelCrew
         private static readonly int IsRunning = Animator.StringToHash("is-running");
         private static readonly int VerticalVelocity = Animator.StringToHash("vertical-velocity");
         private static readonly int Hit = Animator.StringToHash("hit");
+        private static readonly int AttackKey = Animator.StringToHash("attack");
         
         //Параметр для всех методов детекта кроме третьего, так как мы его указали в самом компоненте
         [SerializeField] private LayerMask _groundLayer;
@@ -34,14 +40,23 @@ namespace PixelCrew
         [SerializeField] private float _groundCheckRadius;
         [SerializeField] private Vector3 _groundCheckPositionDelta;
 
+        [SerializeField] private AnimatorController _armed;
+        [SerializeField] private AnimatorController _disarmed;
+
+        [SerializeField] private CheckCircleOverLap _attackRange;
+
+        [Space] [Header("Particles")]
         [SerializeField] private SpawnComponent _footStepsParticles;
         [SerializeField] private SpawnComponent _jumpParticles;
+        [SerializeField] private SpawnComponent _slamDownParticles;
         [SerializeField] private ParticleSystem _hitParticles;
         
         //Параметры для интеракта
         [SerializeField] private float _interactionRadius;
         [SerializeField] private LayerMask _interactionLayer;
         private Collider2D[] _interactionResult = new Collider2D[1]; //массив коллайдеров c инециализацией одного значения в массиве
+
+        private bool _isArmed;
 
         private int _coins;
         
@@ -161,6 +176,8 @@ namespace PixelCrew
             _isGrounded = IsGrounded();
         }
 
+        //if dev комишен компилейшен - позволяет вырезать кусочки кода при компиляции, если в юнити эдиторе, то будет отображаться,а если на какую то платформу, то код вырежеться
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             //в дебажных методах мы используем мировые координаты!
@@ -169,13 +186,20 @@ namespace PixelCrew
             
             
             //Отрисовка рейкаст сферы
-            Gizmos.color = IsGrounded() ? Color.green : Color.red;
-            Gizmos.DrawSphere(transform.position + _groundCheckPositionDelta, _groundCheckRadius);
+            
+            //Старый способ отрисовки
+            //Gizmos.color = IsGrounded() ? Color.green : Color.red;
+            //Gizmos.DrawSphere(transform.position + _groundCheckPositionDelta, _groundCheckRadius);
+
+            //Новый способ
+            Handles.color = IsGrounded() ? HandlesUtils.TransparentGreen : HandlesUtils.TransparentRed;
+            Handles.DrawSolidDisc(transform.position + _groundCheckPositionDelta, Vector3.forward, _groundCheckRadius);
             
             //Отрисовка рейкаст сферы для третьего способа, просто чтобы понять сработало или нет
             /*Gizmos.color = IsGrounded() ? Color.green : Color.red;
             Gizmos.DrawSphere(transform.position ,0.3f);*/
         }
+#endif
 
         public void SetDirection(Vector2 direction)
         {
@@ -237,9 +261,52 @@ namespace PixelCrew
             }
         }
 
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            //если мы столкнулись с землей (проверяем слой)
+            if (other.gameObject.IsInLayer(_groundLayer))
+            {
+                var contact = other.contacts[0];
+                if (contact.relativeVelocity.y >= _slamDownVelocity) //.relativeVelocity - скорость относительно двух коллайдеров (т.е когда они столкнулись, мы можем понять с какой скоростью они столкнулись и понять какие у них были относительно друг другу скорости)
+                {
+                    _slamDownParticles.Spawn();
+                } 
+            }
+        }
+
         public void SpawnFootDust()
         {
             _footStepsParticles.Spawn();
+        }
+        
+        //тут мы просто запускаем анимацию
+        public void Attack()
+        {
+            if (!_isArmed) return;
+            
+            _animator.SetTrigger(AttackKey);
+        }
+
+        //Производим сами расчеты, в анимационном ивенте на определенном кадре, чтобы нельзя было заспамить
+        private void PerformAttack() //бывший OnAttack, поменял потому что происходит конфликт
+        {
+            var gos = _attackRange.GetObjectsInRange();
+
+            foreach (var go in gos)
+            {
+                var hp = go.GetComponent<HealthComponent>();
+
+                if (hp != null && go.CompareTag("Enemy"))
+                {
+                    hp.ModifyHealth( - _damage);
+                }
+            }
+        }
+        
+        public void ArmHero()
+        {
+            _isArmed = true;
+            _animator.runtimeAnimatorController = _armed;
         }
 
         public void Dash()

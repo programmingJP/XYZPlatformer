@@ -49,6 +49,14 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""0b4f1c55-c77b-4b2a-a9c1-2e30f44e482a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -110,7 +118,7 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""57ab3e82-143f-45af-8359-79afe3a4d053"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -139,6 +147,17 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4882ad1a-b390-455c-a7c0-f27d56e10fa7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -151,6 +170,7 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
         m_Hero_SaySomething = m_Hero.FindAction("SaySomething", throwIfNotFound: true);
         m_Hero_Interact = m_Hero.FindAction("Interact", throwIfNotFound: true);
         m_Hero_Dash = m_Hero.FindAction("Dash", throwIfNotFound: true);
+        m_Hero_Attack = m_Hero.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,6 +224,7 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Hero_SaySomething;
     private readonly InputAction m_Hero_Interact;
     private readonly InputAction m_Hero_Dash;
+    private readonly InputAction m_Hero_Attack;
     public struct HeroActions
     {
         private @HeroInputAction m_Wrapper;
@@ -212,6 +233,7 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
         public InputAction @SaySomething => m_Wrapper.m_Hero_SaySomething;
         public InputAction @Interact => m_Wrapper.m_Hero_Interact;
         public InputAction @Dash => m_Wrapper.m_Hero_Dash;
+        public InputAction @Attack => m_Wrapper.m_Hero_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Hero; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -233,6 +255,9 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_HeroActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_HeroActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_HeroActionsCallbackInterface.OnDash;
+                @Attack.started -= m_Wrapper.m_HeroActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_HeroActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_HeroActionsCallbackInterface.OnAttack;
             }
             m_Wrapper.m_HeroActionsCallbackInterface = instance;
             if (instance != null)
@@ -249,6 +274,9 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
             }
         }
     }
@@ -259,5 +287,6 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
         void OnSaySomething(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }

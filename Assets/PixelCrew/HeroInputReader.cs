@@ -23,6 +23,14 @@ namespace PixelCrew
          }
       }
 
+      public void OnAttack(InputAction.CallbackContext context)
+      {
+         if (context.canceled)
+         {
+            _hero.Attack();
+         }
+      }
+
       public void OnSaySomething(InputAction.CallbackContext context)
       {
          //context.started - начало события
