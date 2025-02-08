@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PixelCrew.Model;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace PixelCrew.Components
@@ -8,6 +9,9 @@ namespace PixelCrew.Components
     {
         public void Reload()
         {
+            var session = FindObjectOfType<GameSession>(); //получаем текущую сессию
+            Destroy(session.gameObject); // уничтожаем сессию //получается что после перезагрузки мы возьмем дефолтное состояние сесии
+
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }

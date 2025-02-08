@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using PixelCrew.Components;
+using PixelCrew.Model;
 using PixelCrew.Utils;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -16,6 +16,11 @@ namespace PixelCrew
         [SerializeField] private float _damageJumpForce;
         [SerializeField] private float _slamDownVelocity;
         [SerializeField] private int _damage;
+        
+        [SerializeField] private float _damageVelocity;
+        [SerializeField] private int _damageOnGroundSlam;
+
+        private HealthComponent _slamDamageModify;
         
         //[SerializeField] private LayerCheck _groundCheck; для отдельного скрипта чекера
         
@@ -56,21 +61,37 @@ namespace PixelCrew
         [SerializeField] private LayerMask _interactionLayer;
         private Collider2D[] _interactionResult = new Collider2D[1]; //массив коллайдеров c инециализацией одного значения в массиве
 
-        private bool _isArmed;
-
-        private int _coins;
-        
         //TODO DASH
         [SerializeField] private float _dashDuration;
         [SerializeField] private float _dashForce;
         [SerializeField] private float _dashCooldown;
+        
         private bool _isDashing;
         private bool _canDash = true;
+
+        private GameSession _session;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
+            _slamDamageModify = GetComponent<HealthComponent>();
+        }
+
+        //Метод для обновления данных сессии по ХП игрока т.е сохраняем текущее здоровье игрока в сессию
+
+        private void Start() //вызываем в старте так как гейм сессион у нас забирается на эвейке
+        {
+            _session = FindObjectOfType<GameSession>(); // записываем игровую сессию в переменную
+            var health = GetComponent<HealthComponent>();//получаем компонент здоровья
+            
+            health.SetHealth(_session.Data.Hp); //записываем текущее здоровье в компонент
+            UpdateHeroWeapon();
+        }
+        
+        public void OnHealthChanged(int currentHealth)
+        {
+            _session.Data.Hp = currentHealth;
         }
 
         private void FixedUpdate()
@@ -213,8 +234,8 @@ namespace PixelCrew
 
         public void AddCoins(int coins)
         {
-            _coins += coins;
-            Debug.Log($"Coins: {_coins}");
+            _session.Data.Coins += coins;
+            Debug.Log($"Coins: {_session.Data.Coins}");
         }
 
         public void TakeDamage()
@@ -223,7 +244,7 @@ namespace PixelCrew
             _animator.SetTrigger(Hit);
             _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _damageJumpForce); //сила при получении урона, чтобы герой чуть подлетел
 
-            if (_coins > 0)
+            if (_session.Data.Coins > 0)
             {
                 SpawnCoins();
             }
@@ -231,8 +252,8 @@ namespace PixelCrew
 
         private void SpawnCoins()
         {
-            var numCoinsToDispose = Mathf.Min(_coins, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
-            _coins -= numCoinsToDispose; //обновляем количество коинов, которое остается после хита
+            var numCoinsToDispose = Mathf.Min(_session.Data.Coins, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
+            _session.Data.Coins -= numCoinsToDispose; //обновляем количество коинов, которое остается после хита
 
             var burst = _hitParticles.emission.GetBurst(0); //получаем бурст из эмиссии
             burst.count = numCoinsToDispose; //передаем количество коинов которое надо выкинуть
@@ -270,7 +291,12 @@ namespace PixelCrew
                 if (contact.relativeVelocity.y >= _slamDownVelocity) //.relativeVelocity - скорость относительно двух коллайдеров (т.е когда они столкнулись, мы можем понять с какой скоростью они столкнулись и понять какие у них были относительно друг другу скорости)
                 {
                     _slamDownParticles.Spawn();
-                } 
+                }
+
+                if (contact.relativeVelocity.y >= _damageVelocity)
+                {
+                    _slamDamageModify.ModifyHealth(- _damageOnGroundSlam); //на эвейке мы закэшировали компонент, чтобы постоянно не дергать его
+                }
             }
         }
 
@@ -282,13 +308,13 @@ namespace PixelCrew
         //тут мы просто запускаем анимацию
         public void Attack()
         {
-            if (!_isArmed) return;
+            if (!_session.Data.IsArmed) return;
             
             _animator.SetTrigger(AttackKey);
         }
 
         //Производим сами расчеты, в анимационном ивенте на определенном кадре, чтобы нельзя было заспамить
-        private void PerformAttack() //бывший OnAttack, поменял потому что происходит конфликт
+        private void PerformAttack() //бывший OnAttack, поменял потому что происходит конфликт (OnDoAttack у Алексея)
         {
             var gos = _attackRange.GetObjectsInRange();
 
@@ -302,11 +328,17 @@ namespace PixelCrew
                 }
             }
         }
-        
+
         public void ArmHero()
         {
-            _isArmed = true;
+            _session.Data.IsArmed = true;
+            UpdateHeroWeapon();
             _animator.runtimeAnimatorController = _armed;
+        }
+        
+        private void UpdateHeroWeapon()
+        {
+            _animator.runtimeAnimatorController = _session.Data.IsArmed ? _armed : _disarmed;
         }
 
         public void Dash()
