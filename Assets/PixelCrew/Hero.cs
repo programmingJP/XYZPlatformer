@@ -40,6 +40,7 @@ namespace PixelCrew
         
         //Параметр для всех методов детекта кроме третьего, так как мы его указали в самом компоненте
         [SerializeField] private LayerMask _groundLayer;
+        [SerializeField] private LayerCheck _wallCheck;
 
         //Параметры для рейкаст сферы
         [SerializeField] private float _groundCheckRadius;
@@ -69,6 +70,9 @@ namespace PixelCrew
         private bool _isDashing;
         private bool _canDash = true;
 
+        private bool _isOnWall;
+        private float _defaultGravityScale;
+
         private GameSession _session;
 
         private void Awake()
@@ -76,6 +80,7 @@ namespace PixelCrew
             _rigidbody = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _slamDamageModify = GetComponent<HealthComponent>();
+            _defaultGravityScale = _rigidbody.gravityScale;
         }
 
         //Метод для обновления данных сессии по ХП игрока т.е сохраняем текущее здоровье игрока в сессию
@@ -120,10 +125,20 @@ namespace PixelCrew
                 _isJumping = false;
             }
 
+            if (_isOnWall)
+            {
+                _allowDoubleJump = true;
+            }
+
             if (isJumpPressing) //если мы нажимаем прыжок, то начинаем расчет прыжка
             {
                 _isJumping = true;
                 yVelocity = CalculateJumpVelocity(yVelocity);
+            }
+
+            else if (_isOnWall)
+            {
+                yVelocity = 0f;
             }
             else if (_rigidbody.velocity.y > 0 && _isJumping) // иначе мы уменьшаем скорость, чтобы у нас регулировалась высота прыжка
             {
@@ -195,6 +210,18 @@ namespace PixelCrew
         private void Update()
         {
             _isGrounded = IsGrounded();
+
+            if (_wallCheck.IsTouchingLayer && _direction.x == transform.localScale.x) //проверяем столкнулись ли мы с стеной
+            {
+                _isOnWall = true;
+                _rigidbody.gravityScale = 0; //если мы столкнулись с стеной, то мы не можем падать //выключили гравитацию
+            }
+
+            else
+            {
+                _isOnWall = false;
+                _rigidbody.gravityScale = _defaultGravityScale; //включили гравитацию
+            }
         }
 
         //if dev комишен компилейшен - позволяет вырезать кусочки кода при компиляции, если в юнити эдиторе, то будет отображаться,а если на какую то платформу, то код вырежеться
