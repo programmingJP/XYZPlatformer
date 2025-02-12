@@ -6,7 +6,7 @@ namespace PixelCrew.Components
     {
         public void ArmHero(GameObject go)
         {
-           var hero = go.GetComponent<Hero>();
+           var hero = go.GetComponent<Creatures.Hero>();
 
            if (hero != null)
            {

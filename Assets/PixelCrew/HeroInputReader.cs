@@ -6,7 +6,7 @@ namespace PixelCrew
 {
    public class HeroInputReader : MonoBehaviour
    {
-      [SerializeField] private Hero _hero;
+      [SerializeField] private Creatures.Hero _hero;
       
       public void OnMovement(InputAction.CallbackContext context)
       {
@@ -28,20 +28,6 @@ namespace PixelCrew
          if (context.canceled)
          {
             _hero.Attack();
-         }
-      }
-
-      public void OnSaySomething(InputAction.CallbackContext context)
-      {
-         //context.started - начало события
-         //context.performed - продолжение события
-         //context.canceled - закончилось событие
-      
-         //contex.phase - состояние события(фаза)
-      
-         if (context.canceled)
-         {
-            _hero.SaySomething();
          }
       }
 

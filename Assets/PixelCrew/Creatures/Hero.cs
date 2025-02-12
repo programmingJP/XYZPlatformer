@@ -1,0 +1,262 @@
+﻿using System.Collections;
+using PixelCrew.Components;
+using PixelCrew.Model;
+using PixelCrew.Utils;
+using UnityEditor.Animations;
+using UnityEngine;
+
+namespace PixelCrew.Creatures
+{
+    public class Hero : Creature
+    {
+        [SerializeField] private CheckCircleOverLap _interactionCheck;
+        [SerializeField] private LayerCheck _wallCheck;
+        
+        //[SerializeField] private float _damageJumpForce;
+        [SerializeField] private float _slamDownVelocity;
+        [SerializeField] private float _interactionRadius;
+
+
+        [SerializeField] private int _damageOnGroundSlam;
+
+        private HealthComponent _slamDamageModify;
+        
+        //[SerializeField] private LayerCheck _groundCheck; для отдельного скрипта чекера
+        
+        
+        private bool _allowDoubleJump;
+        
+        
+        //Переводим строки в хэш и записываем в "константы" переменные
+        
+        
+        //Параметр для всех методов детекта кроме третьего, так как мы его указали в самом компоненте
+        
+
+        //Параметры для рейкаст сферы
+        //[SerializeField] private float _groundCheckRadius;
+        //[SerializeField] private Vector3 _groundCheckPositionDelta;
+
+        [SerializeField] private AnimatorController _armed;
+        [SerializeField] private AnimatorController _disarmed;
+
+
+
+        [Space] [Header("Particles")]
+        [SerializeField] private ParticleSystem _hitParticles;
+        
+
+
+        //TODO DASH
+        [SerializeField] private float _dashDuration;
+        [SerializeField] private float _dashForce;
+        [SerializeField] private float _dashCooldown;
+        
+        //Cервисные переменные
+        private bool _isDashing;
+        private bool _canDash = true;
+
+        private bool _isOnWall;
+        private float _defaultGravityScale;
+
+        private GameSession _session;
+
+        protected override void Awake()
+        {
+            /*
+             * с помощью ключевого слова base вызываем метод Awake у родительского класса
+             * а потом дописываем и вызываем код непосредственно в классе наследнике
+             */
+            base.Awake();
+            _slamDamageModify = GetComponent<HealthComponent>();
+            _defaultGravityScale = Rigidbody.gravityScale;
+        }
+
+        //Метод для обновления данных сессии по ХП игрока т.е сохраняем текущее здоровье игрока в сессию
+
+        private void Start() //вызываем в старте так как гейм сессион у нас забирается на эвейке
+        {
+            _session = FindObjectOfType<GameSession>(); // записываем игровую сессию в переменную
+            var health = GetComponent<HealthComponent>();//получаем компонент здоровья
+            
+            health.SetHealth(_session.Data.Hp); //записываем текущее здоровье в компонент
+            UpdateHeroWeapon();
+        }
+        
+        public void OnHealthChanged(int currentHealth)
+        {
+            _session.Data.Hp = currentHealth;
+        }
+
+        
+
+        protected override float CalculateYVelocity()
+        {
+            float yVelocity = Rigidbody.velocity.y; //получаем текущую скорость по y
+            
+            bool isJumpPressing = Direction.y > 0;
+
+            if (IsGrounded || _isOnWall)
+            {
+                _allowDoubleJump = true; //если мы стоим на земле, то разрешаем двойной прыжок
+            }
+
+            if (!isJumpPressing && _isOnWall)
+            {
+                return 0f;
+            }
+
+            return base.CalculateYVelocity();
+        }
+        
+        
+        protected override float CalculateJumpVelocity(float yVelocity)
+        {
+            if (!IsGrounded &&_allowDoubleJump)
+            {
+                _particles.Spawn("Jump");
+                _allowDoubleJump = false;
+                return _jumpForce;
+            }
+            
+            return base.CalculateJumpVelocity(yVelocity);
+        }
+
+        //Метод для обновления направления спрайта
+       
+
+        //Первый способ детекта
+        /*private bool IsGrounded() // метод рейкаста одного луча
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1, _groundLayer);
+            
+            return hit.collider != null; // если у хита есть коллайдер, значит нашли обьект который лежит на слое граунд леер
+        }*/
+        
+        //Второй способ детекта
+        
+
+        //Третий способ детекта
+        
+        /*private bool IsGrounded() // метод рейкаста одного луча
+        {
+            return _groundCheck.IsTouchingLayer;
+        }*/
+
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (_wallCheck.IsTouchingLayer && Direction.x == transform.localScale.x) //проверяем столкнулись ли мы с стеной
+            {
+                _isOnWall = true;
+                Rigidbody.gravityScale = 0; //если мы столкнулись с стеной, то мы не можем падать //выключили гравитацию
+            }
+
+            else
+            {
+                _isOnWall = false;
+                Rigidbody.gravityScale = _defaultGravityScale; //включили гравитацию
+            }
+        }
+
+        //if dev комишен компилейшен - позволяет вырезать кусочки кода при компиляции, если в юнити эдиторе, то будет отображаться,а если на какую то платформу, то код вырежеться
+
+
+
+        public void AddCoins(int coins)
+        {
+            _session.Data.Coins += coins;
+            Debug.Log($"Coins: {_session.Data.Coins}");
+        }
+
+        public override void TakeDamage()
+        {
+            base.TakeDamage();
+            if (_session.Data.Coins > 0)
+            {
+                SpawnCoins();
+            }
+        }
+
+        private void SpawnCoins()
+        {
+            var numCoinsToDispose = Mathf.Min(_session.Data.Coins, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
+            _session.Data.Coins -= numCoinsToDispose; //обновляем количество коинов, которое остается после хита
+
+            var burst = _hitParticles.emission.GetBurst(0); //получаем бурст из эмиссии
+            burst.count = numCoinsToDispose; //передаем количество коинов которое надо выкинуть
+            _hitParticles.emission.SetBurst(0, burst); //ставим обратно наш бюрст в нужный индекс
+            
+            _hitParticles.gameObject.SetActive(true); //включаем эффект
+            _hitParticles.Play(); //проигрываем эффект
+        }
+
+        public void Interact()
+        {
+            _interactionCheck.Check();
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            //если мы столкнулись с землей (проверяем слой)
+            if (other.gameObject.IsInLayer(_groundLayer))
+            {
+                var contact = other.contacts[0];
+                if (contact.relativeVelocity.y >= _slamDownVelocity) //.relativeVelocity - скорость относительно двух коллайдеров (т.е когда они столкнулись, мы можем понять с какой скоростью они столкнулись и понять какие у них были относительно друг другу скорости)
+                {
+                    _particles.Spawn("SlamDown");
+                }
+            }
+        }
+
+        //тут мы просто запускаем анимацию
+        public override void Attack()
+        {
+            if (!_session.Data.IsArmed) return;
+
+            base.Attack();
+        }
+
+        //Производим сами расчеты, в анимационном ивенте на определенном кадре, чтобы нельзя было заспамить
+        
+
+        public void ArmHero()
+        {
+            _session.Data.IsArmed = true;
+            UpdateHeroWeapon();
+            Animator.runtimeAnimatorController = _armed;
+        }
+        
+        private void UpdateHeroWeapon()
+        {
+            Animator.runtimeAnimatorController = _session.Data.IsArmed ? _armed : _disarmed;
+        }
+
+        public void Dash()
+        {
+            if (!_canDash || _isDashing) return;
+            
+            if (!IsGrounded) StartCoroutine(PerformDash());
+
+        }
+
+        private IEnumerator PerformDash()
+        {
+            _canDash = false;
+            _isDashing = true;
+
+            float originalSpeed = _speed;
+            _speed = _dashForce;
+
+            yield return new WaitForSeconds(_dashDuration);
+
+            _speed = originalSpeed; 
+            _isDashing = false;
+
+            yield return new WaitForSeconds(_dashCooldown); 
+            _canDash = true;
+        }
+    }
+}

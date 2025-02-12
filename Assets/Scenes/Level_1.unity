@@ -14604,16 +14604,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 467572373137946540, guid: ff5b0bc412e4f794eacd8facdab90d80,
-        type: 3}
-      propertyPath: _health
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 467572373137946542, guid: ff5b0bc412e4f794eacd8facdab90d80,
-        type: 3}
-      propertyPath: m_BodyType
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff5b0bc412e4f794eacd8facdab90d80, type: 3}
 --- !u!1001 &1616376850339188693
@@ -14762,6 +14752,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Helm
+      objectReference: {fileID: 0}
+    - target: {fileID: 2111105411275592291, guid: 2fbfc6065315ac6459169833303423c1,
+        type: 3}
+      propertyPath: m_TagString
+      value: Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 7214813212245129735, guid: 2fbfc6065315ac6459169833303423c1,
         type: 3}
