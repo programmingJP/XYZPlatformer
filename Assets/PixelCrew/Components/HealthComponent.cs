@@ -27,9 +27,10 @@ namespace PixelCrew.Components
                 _onHeal?.Invoke();
             }
 
-            if (_health == 0)
+            if (_health <= 0)
             {
                 _onDie?.Invoke();
+                Debug.Log("die");
             }
         }
 

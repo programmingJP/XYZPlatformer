@@ -559,7 +559,7 @@ MonoBehaviour:
   _canAttack: {fileID: 659576836}
   _alarmDelay: 0.5
   _attackCooldown: 1
-  _missCooldown: 0.5
+  _missCooldown: 1
 --- !u!114 &1211050692
 MonoBehaviour:
   m_ObjectHideFlags: 0

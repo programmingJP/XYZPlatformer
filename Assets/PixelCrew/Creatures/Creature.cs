@@ -117,6 +117,7 @@ namespace PixelCrew.Creatures
         public virtual void TakeDamage()
         {
             _isJumping = false;
+            Debug.Log("SharkHitNow");
             Animator.SetTrigger(Hit);
             Rigidbody.velocity = new Vector2(Rigidbody.velocity.x, _damageVelocity); //сила при получении урона, чтобы герой чуть подлетел
         }

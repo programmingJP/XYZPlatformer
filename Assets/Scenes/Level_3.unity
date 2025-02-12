@@ -373,11 +373,6 @@ PrefabInstance:
       propertyPath: _points.Array.data[1]
       value: 
       objectReference: {fileID: 1842961919}
-    - target: {fileID: 8218549987376122147, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
-        type: 3}
-      propertyPath: _invertScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8778912962307261157, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
         type: 3}
       propertyPath: m_RootOrder
@@ -437,11 +432,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sharky
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778912962307261165, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
-        type: 3}
-      propertyPath: _health
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42fc3f1c3bb03834688e5fcfab82b27a, type: 3}
@@ -658,11 +648,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8778912962307261156, guid: 84c986a935c3fef438aae18489cc5e6f,
-        type: 3}
-      propertyPath: _damageVelocity
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 8778912962307261157, guid: 84c986a935c3fef438aae18489cc5e6f,
         type: 3}
       propertyPath: m_RootOrder
@@ -722,11 +707,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Hero
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778912962307261165, guid: 84c986a935c3fef438aae18489cc5e6f,
-        type: 3}
-      propertyPath: _onDie.m_PersistentCalls.m_Calls.Array.size
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84c986a935c3fef438aae18489cc5e6f, type: 3}

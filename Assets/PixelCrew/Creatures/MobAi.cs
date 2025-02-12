@@ -68,8 +68,19 @@ namespace PixelCrew.Creatures
                 
                 yield return null;//пропускаем один кадр
                 
-                _particles.Spawn("MissHero");
+                //_particles.Spawn("MissHero"); было раньше
+                
+                //yield return new WaitForSeconds(_missCooldown); было раньше
+            }
+
+            //TODO ВОТ ЭТОТ ИФ ПОТОМ ПОЛНОСТЬЮ УБРАТЬ, ПРОШЛУЮ КОНСТРУКЦИЮ ВОССТАНОВИТЬ
+            if (_vision.IsTouchingLayer != true)
+            {
+                yield return new WaitForSeconds(1f);
+                _particles.Spawn("MissHero"); 
+                
                 yield return new WaitForSeconds(_missCooldown);
+                StarState(_patrol.DoPatrol());
             }
         }
 
