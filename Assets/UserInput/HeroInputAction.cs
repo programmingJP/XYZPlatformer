@@ -27,14 +27,6 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""SaySomething"",
-                    ""type"": ""Button"",
-                    ""id"": ""611345a2-e530-4775-ba3f-27ab9d03e27f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""11fefeef-5674-4827-91a7-d9c316f4b968"",
@@ -54,6 +46,14 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                     ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""0b4f1c55-c77b-4b2a-a9c1-2e30f44e482a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""deec9b63-ac3f-4d28-a586-7f4a5fadd96b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -117,17 +117,6 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""57ab3e82-143f-45af-8359-79afe3a4d053"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SaySomething"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""5a6f7010-264b-4ad8-b611-3b0e222b3f64"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -158,6 +147,17 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08bbb240-7b74-4647-8f8a-7b9e6fe6f029"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -167,10 +167,10 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
         // Hero
         m_Hero = asset.FindActionMap("Hero", throwIfNotFound: true);
         m_Hero_Movement = m_Hero.FindAction("Movement", throwIfNotFound: true);
-        m_Hero_SaySomething = m_Hero.FindAction("SaySomething", throwIfNotFound: true);
         m_Hero_Interact = m_Hero.FindAction("Interact", throwIfNotFound: true);
         m_Hero_Dash = m_Hero.FindAction("Dash", throwIfNotFound: true);
         m_Hero_Attack = m_Hero.FindAction("Attack", throwIfNotFound: true);
+        m_Hero_Throw = m_Hero.FindAction("Throw", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -221,19 +221,19 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Hero;
     private IHeroActions m_HeroActionsCallbackInterface;
     private readonly InputAction m_Hero_Movement;
-    private readonly InputAction m_Hero_SaySomething;
     private readonly InputAction m_Hero_Interact;
     private readonly InputAction m_Hero_Dash;
     private readonly InputAction m_Hero_Attack;
+    private readonly InputAction m_Hero_Throw;
     public struct HeroActions
     {
         private @HeroInputAction m_Wrapper;
         public HeroActions(@HeroInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Hero_Movement;
-        public InputAction @SaySomething => m_Wrapper.m_Hero_SaySomething;
         public InputAction @Interact => m_Wrapper.m_Hero_Interact;
         public InputAction @Dash => m_Wrapper.m_Hero_Dash;
         public InputAction @Attack => m_Wrapper.m_Hero_Attack;
+        public InputAction @Throw => m_Wrapper.m_Hero_Throw;
         public InputActionMap Get() { return m_Wrapper.m_Hero; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -246,9 +246,6 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_HeroActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_HeroActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_HeroActionsCallbackInterface.OnMovement;
-                @SaySomething.started -= m_Wrapper.m_HeroActionsCallbackInterface.OnSaySomething;
-                @SaySomething.performed -= m_Wrapper.m_HeroActionsCallbackInterface.OnSaySomething;
-                @SaySomething.canceled -= m_Wrapper.m_HeroActionsCallbackInterface.OnSaySomething;
                 @Interact.started -= m_Wrapper.m_HeroActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_HeroActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_HeroActionsCallbackInterface.OnInteract;
@@ -258,6 +255,9 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 @Attack.started -= m_Wrapper.m_HeroActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_HeroActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_HeroActionsCallbackInterface.OnAttack;
+                @Throw.started -= m_Wrapper.m_HeroActionsCallbackInterface.OnThrow;
+                @Throw.performed -= m_Wrapper.m_HeroActionsCallbackInterface.OnThrow;
+                @Throw.canceled -= m_Wrapper.m_HeroActionsCallbackInterface.OnThrow;
             }
             m_Wrapper.m_HeroActionsCallbackInterface = instance;
             if (instance != null)
@@ -265,9 +265,6 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
-                @SaySomething.started += instance.OnSaySomething;
-                @SaySomething.performed += instance.OnSaySomething;
-                @SaySomething.canceled += instance.OnSaySomething;
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
@@ -277,6 +274,9 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Throw.started += instance.OnThrow;
+                @Throw.performed += instance.OnThrow;
+                @Throw.canceled += instance.OnThrow;
             }
         }
     }
@@ -284,9 +284,9 @@ public class @HeroInputAction : IInputActionCollection, IDisposable
     public interface IHeroActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnSaySomething(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
     }
 }

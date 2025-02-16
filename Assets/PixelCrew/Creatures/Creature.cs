@@ -47,7 +47,7 @@ namespace PixelCrew.Creatures
             Animator.SetBool(IsRunning, Direction.x != 0); //если направление х не равно нулю, то будет true
             Animator.SetFloat(VerticalVelocity, Rigidbody.velocity.y);
 
-            UpdateSpriteDirection();
+            UpdateSpriteDirection(Direction);
         }
 
         protected virtual void Update()
@@ -100,15 +100,15 @@ namespace PixelCrew.Creatures
             return yVelocity;
         }
         
-        private void UpdateSpriteDirection()
+        public void UpdateSpriteDirection(Vector2 direction)
         {
             //для инвертирования мы будем домнажать на 1 либо - 1
             var multiplier = _invertScale ? -1 : 1;
-            if (Direction.x > 0)
+            if (direction.x > 0)
             {
                 transform.localScale = new Vector3(multiplier,1,1);
             }
-            else if (Direction.x < 0)
+            else if (direction.x < 0)
             {
                 transform.localScale = new Vector3(-1 * multiplier, 1, 1);
             }

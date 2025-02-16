@@ -12,7 +12,6 @@ namespace PixelCrew.Creatures
         [SerializeField] private CheckCircleOverLap _interactionCheck;
         [SerializeField] private LayerCheck _wallCheck;
         
-        //[SerializeField] private float _damageJumpForce;
         [SerializeField] private float _slamDownVelocity;
         [SerializeField] private float _interactionRadius;
 
@@ -21,36 +20,22 @@ namespace PixelCrew.Creatures
 
         private HealthComponent _slamDamageModify;
         
-        //[SerializeField] private LayerCheck _groundCheck; для отдельного скрипта чекера
-        
-        
         private bool _allowDoubleJump;
-        
-        
-        //Переводим строки в хэш и записываем в "константы" переменные
-        
-        
-        //Параметр для всех методов детекта кроме третьего, так как мы его указали в самом компоненте
-        
 
-        //Параметры для рейкаст сферы
-        //[SerializeField] private float _groundCheckRadius;
-        //[SerializeField] private Vector3 _groundCheckPositionDelta;
-
+        
+        [SerializeField] private Cooldown _throwCooldown;
         [SerializeField] private AnimatorController _armed;
         [SerializeField] private AnimatorController _disarmed;
-
-
 
         [Space] [Header("Particles")]
         [SerializeField] private ParticleSystem _hitParticles;
         
-
-
         //TODO DASH
         [SerializeField] private float _dashDuration;
         [SerializeField] private float _dashForce;
         [SerializeField] private float _dashCooldown;
+
+        private static readonly int ThrowKey = Animator.StringToHash("throw");
         
         //Cервисные переменные
         private bool _isDashing;
@@ -121,27 +106,6 @@ namespace PixelCrew.Creatures
             
             return base.CalculateJumpVelocity(yVelocity);
         }
-
-        //Метод для обновления направления спрайта
-       
-
-        //Первый способ детекта
-        /*private bool IsGrounded() // метод рейкаста одного луча
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1, _groundLayer);
-            
-            return hit.collider != null; // если у хита есть коллайдер, значит нашли обьект который лежит на слое граунд леер
-        }*/
-        
-        //Второй способ детекта
-        
-
-        //Третий способ детекта
-        
-        /*private bool IsGrounded() // метод рейкаста одного луча
-        {
-            return _groundCheck.IsTouchingLayer;
-        }*/
 
 
         protected override void Update()
@@ -217,6 +181,7 @@ namespace PixelCrew.Creatures
             if (!_session.Data.IsArmed) return;
 
             base.Attack();
+            _particles.Spawn("Attack");
         }
 
         //Производим сами расчеты, в анимационном ивенте на определенном кадре, чтобы нельзя было заспамить
@@ -257,6 +222,19 @@ namespace PixelCrew.Creatures
 
             yield return new WaitForSeconds(_dashCooldown); 
             _canDash = true;
+        }
+
+        public void OnDoThrow()
+        {
+            _particles.Spawn("Throw");
+        }
+        public void Throw()
+        {
+            if (_throwCooldown.IsReady)
+            {
+                Animator.SetTrigger(ThrowKey);
+                _throwCooldown.Reset();
+            }
         }
     }
 }

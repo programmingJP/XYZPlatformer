@@ -9,9 +9,9 @@ namespace PixelCrew.Creatures
         [SerializeField] private LayerCheck _vision;
         [SerializeField] private LayerCheck _canAttack;
 
-        [SerializeField] private float _alarmDelay;
-        [SerializeField] private float _attackCooldown;
-        [SerializeField] private float _missCooldown;
+        [SerializeField] private float _alarmDelay = 0.5f;
+        [SerializeField] private float _attackCooldown = 1f;
+        [SerializeField] private float _missCooldown = 0.5f;
 
         private Coroutine _current;
         private GameObject _target;
@@ -47,9 +47,18 @@ namespace PixelCrew.Creatures
 
         private IEnumerator AgroToHero()
         {
+            LookAtHero();
             _particles.Spawn("Exclamation");
             yield return new WaitForSeconds(_alarmDelay);
+            
             StarState(GoToHero());
+        }
+
+        private void LookAtHero()
+        {
+            var direction = GetDirectionToTarget();
+            _creature.SetDirection(Vector2.zero);
+            _creature.UpdateSpriteDirection(direction);
         }
 
         private IEnumerator GoToHero()
@@ -67,21 +76,14 @@ namespace PixelCrew.Creatures
                 }
                 
                 yield return null;//пропускаем один кадр
-                
-                //_particles.Spawn("MissHero"); было раньше
-                
-                //yield return new WaitForSeconds(_missCooldown); было раньше
             }
-
-            //TODO ВОТ ЭТОТ ИФ ПОТОМ ПОЛНОСТЬЮ УБРАТЬ, ПРОШЛУЮ КОНСТРУКЦИЮ ВОССТАНОВИТЬ
-            if (_vision.IsTouchingLayer != true)
-            {
-                yield return new WaitForSeconds(1f);
-                _particles.Spawn("MissHero"); 
+            
+            _creature.SetDirection(Vector2.zero);
+            _particles.Spawn("MissHero");
                 
-                yield return new WaitForSeconds(_missCooldown);
-                StarState(_patrol.DoPatrol());
-            }
+            yield return new WaitForSeconds(_missCooldown);
+                
+            StarState(_patrol.DoPatrol());
         }
 
         private IEnumerator Attack()
@@ -98,9 +100,15 @@ namespace PixelCrew.Creatures
         private void SetDirectionToTarget()
         {
             //Получаем вектор направления из одной точки в другую
+            var direction = GetDirectionToTarget();
+            _creature.SetDirection(direction);
+        }
+        
+        private Vector2 GetDirectionToTarget()
+        {
             var direction = _target.transform.position - transform.position;
-            direction.y = 0;//нулим y так как двигаемся только по горизонтали
-            _creature.SetDirection(direction.normalized);//устанавливаем направление / должно быть нормализовано чтобы не было перепадов по скорости(еденичный вектор)
+            direction.y = 0; //нулим y так как двигаемся только по горизонтали
+            return direction.normalized;////устанавливаем направление / должно быть нормализовано чтобы не было перепадов по скорости(еденичный вектор)
         }
 
         private void StarState(IEnumerator coroutine)
@@ -120,6 +128,7 @@ namespace PixelCrew.Creatures
             _isDead = true;
             _animator.SetBool(IsDeadKey, true);
             
+            _creature.SetDirection(Vector2.zero);
             if (_current != null) 
                 StopCoroutine(_current);
         }

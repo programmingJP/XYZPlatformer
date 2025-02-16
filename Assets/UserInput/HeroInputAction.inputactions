@@ -14,14 +14,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "SaySomething",
-                    "type": "Button",
-                    "id": "611345a2-e530-4775-ba3f-27ab9d03e27f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "11fefeef-5674-4827-91a7-d9c316f4b968",
@@ -41,6 +33,14 @@
                     "name": "Attack",
                     "type": "Button",
                     "id": "0b4f1c55-c77b-4b2a-a9c1-2e30f44e482a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Throw",
+                    "type": "Button",
+                    "id": "deec9b63-ac3f-4d28-a586-7f4a5fadd96b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -104,17 +104,6 @@
                 },
                 {
                     "name": "",
-                    "id": "57ab3e82-143f-45af-8359-79afe3a4d053",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SaySomething",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "5a6f7010-264b-4ad8-b611-3b0e222b3f64",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -143,6 +132,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08bbb240-7b74-4647-8f8a-7b9e6fe6f029",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
