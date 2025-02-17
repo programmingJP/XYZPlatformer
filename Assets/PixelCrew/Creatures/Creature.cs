@@ -130,6 +130,7 @@ namespace PixelCrew.Creatures
         private void PerformAttack() //бывший OnAttack, поменял потому что происходит конфликт (OnDoAttack у Алексея)
         {
             _attackRange.Check();
+            _particles.Spawn("Slash");
         }
     }
 }

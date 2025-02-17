@@ -10,8 +10,10 @@ namespace PixelCrew.Components
         public void Reload()
         {
             var session = FindObjectOfType<GameSession>(); //получаем текущую сессию
-            Destroy(session.gameObject); // уничтожаем сессию //получается что после перезагрузки мы возьмем дефолтное состояние сесии
+            //Destroy(session.gameObject); // уничтожаем сессию //получается что после перезагрузки мы возьмем дефолтное состояние сесии
 
+            session.LoadLastSave();
+            
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }

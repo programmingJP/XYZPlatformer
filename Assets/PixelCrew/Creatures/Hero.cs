@@ -181,7 +181,6 @@ namespace PixelCrew.Creatures
             if (!_session.Data.IsArmed) return;
 
             base.Attack();
-            _particles.Spawn("Attack");
         }
 
         //Производим сами расчеты, в анимационном ивенте на определенном кадре, чтобы нельзя было заспамить

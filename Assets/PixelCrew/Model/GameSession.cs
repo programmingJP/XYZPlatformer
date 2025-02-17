@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PixelCrew.Model
 {
@@ -8,6 +7,7 @@ namespace PixelCrew.Model
         [SerializeField] private PlayerData _data;
         
         public PlayerData Data => _data;
+        private PlayerData _save;
 
         private void Awake()
         {
@@ -18,6 +18,7 @@ namespace PixelCrew.Model
             }
             else //если сессия не существует в сцене значит это первая сессия и ее нужно сохранить между сценами
             {
+                Save();
                 DontDestroyOnLoad(this);
             }
         }
@@ -36,6 +37,16 @@ namespace PixelCrew.Model
             }
 
             return false; //а иначе вернем фолс
+        }
+        
+        public void Save()
+        {
+            _save = _data.Clone();
+        }
+
+        public void LoadLastSave()
+        {
+            _data = _save.Clone();
         }
     }
 }
