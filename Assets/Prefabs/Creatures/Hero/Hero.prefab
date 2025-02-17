@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 9105381866486859548}
   - component: {fileID: 8230687194197261379}
   m_Layer: 12
-  m_Name: SwordAttackPosition
+  m_Name: SwordSlashPosition
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -778,7 +778,7 @@ MonoBehaviour:
     Component: {fileID: 8778912962113381586}
   - Id: Throw
     Component: {fileID: 9051816895723006554}
-  - Id: Attack
+  - Id: Slash
     Component: {fileID: 8230687194197261379}
 --- !u!114 &1043312511
 MonoBehaviour:

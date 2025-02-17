@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4401928920421784574}
   - component: {fileID: -5486560816866760074}
   m_Layer: 0
-  m_Name: SwordAttackParticle
+  m_Name: SwordSlashParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _frameRate: 10
   _clips:
-  - _name: attack
+  - _name: slash
     _sprites:
     - {fileID: 21300000, guid: 013b62164250d934180132fc55776819, type: 3}
     - {fileID: 21300000, guid: 85c3490d5cdb4ce4c907d3959fc750c0, type: 3}
