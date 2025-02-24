@@ -34,11 +34,13 @@ namespace PixelCrew.Components
             while (itemCount < _count)
             {
                 var random = UnityEngine.Random.value * total;
+                var current = 0f;
                 
                 //Если наше число совпадает с рандомом, то мы добавляем элемент в массив
                 foreach (var dropData in sortedDrop)
                 {
-                    if (dropData.Probability >= random)
+                    current += dropData.Probability;
+                    if (current >= random)
                     {
                         itemsToDrop[itemCount] = dropData.Drop;
                         itemCount++;

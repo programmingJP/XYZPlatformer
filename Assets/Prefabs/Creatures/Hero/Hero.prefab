@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 842090186}
   - component: {fileID: 842090187}
   - component: {fileID: 519603625373549222}
-  m_Layer: 12
+  m_Layer: 15
   m_Name: InteractionCheck
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 963874881}
   - component: {fileID: 963874882}
   - component: {fileID: 963874883}
-  m_Layer: 12
+  m_Layer: 15
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 1791341600}
   - component: {fileID: 1791341602}
   - component: {fileID: 1791341601}
-  m_Layer: 12
+  m_Layer: 15
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,7 +477,6 @@ MonoBehaviour:
   _interactionCheck: {fileID: 842090187}
   _wallCheck: {fileID: 1791341602}
   _slamDownVelocity: 12
-  _interactionRadius: 1
   _damageOnGroundSlam: 1
   _throwCooldown:
     _value: 1
@@ -5679,7 +5678,7 @@ GameObject:
   - component: {fileID: 8778912963169829095}
   - component: {fileID: 8778912963169829112}
   - component: {fileID: 1977065807}
-  m_Layer: 12
+  m_Layer: 15
   m_Name: AttackRange
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}

@@ -2,20 +2,14 @@
 
 namespace PixelCrew.Creatures.Weapons
 {
-    public class Projectile : MonoBehaviour
+    public class Projectile : BaseProjectile
     {
-        [SerializeField] private float _speed;
-        
-        private Rigidbody2D _rigidbody;
-        private int _direction;
-
-        private void Start()
+        protected override void Start()
         {
-            _direction = transform.lossyScale.x > 0 ? 1 : -1; //скейл в глобальных координатах
-            _rigidbody = GetComponent<Rigidbody2D>();//получаем риджидбади которому будем изменять позицию
+            base.Start();
             
-            var force = new Vector2(_direction * _speed, 0);
-            _rigidbody.AddForce(force, ForceMode2D.Impulse); //реализация если делать чтобы меч падал
+            var force = new Vector2(Direction * _speed, 0);
+            Rigidbody.AddForce(force, ForceMode2D.Impulse); //реализация если делать чтобы меч падал
         }
 
         //в фиксед апдейте реализуем передвижение
