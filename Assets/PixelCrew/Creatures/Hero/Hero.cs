@@ -2,6 +2,7 @@
 using PixelCrew.Components.ColliderBased;
 using PixelCrew.Components.Health;
 using PixelCrew.Model;
+using PixelCrew.Model.Data;
 using PixelCrew.Utils;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -47,6 +48,9 @@ namespace PixelCrew.Creatures.Hero
         private float _defaultGravityScale;
 
         private GameSession _session;
+        
+        private int SwordCount => _session.Data.Inventory.Count("Sword");
+        private int CoinsCount => _session.Data.Inventory.Count("Coin");
 
         protected override void Awake()
         {
@@ -65,9 +69,22 @@ namespace PixelCrew.Creatures.Hero
         {
             _session = FindObjectOfType<GameSession>(); // записываем игровую сессию в переменную
             var health = GetComponent<HealthComponent>();//получаем компонент здоровья
+
+            _session.Data.Inventory.OnChanged += OnInventoryChanged;
             
             health.SetHealth(_session.Data.Hp); //записываем текущее здоровье в компонент
             UpdateHeroWeapon();
+        }
+
+        private void OnDestroy()
+        {
+            _session.Data.Inventory.OnChanged -= OnInventoryChanged;
+        }
+
+        private void OnInventoryChanged(string id, int value)
+        {
+            if (id == "Sword")
+                UpdateHeroWeapon();
         }
         
         public void OnHealthChanged(int currentHealth)
@@ -101,8 +118,8 @@ namespace PixelCrew.Creatures.Hero
         {
             if (!IsGrounded &&_allowDoubleJump && !_isOnWall) //!_isOnWall запрещает прыгать когда мы на стене
             {
-                _particles.Spawn("Jump");
                 _allowDoubleJump = false;
+                DoJumpVfx();
                 return _jumpForce;
             }
             
@@ -131,20 +148,15 @@ namespace PixelCrew.Creatures.Hero
             Animator.SetBool(IsOnWall, _isOnWall);
         }
 
-        //if dev комишен компилейшен - позволяет вырезать кусочки кода при компиляции, если в юнити эдиторе, то будет отображаться,а если на какую то платформу, то код вырежеться
-
-
-
-        public void AddCoins(int coins)
+        public void AddInInventory(string id, int value)
         {
-            _session.Data.Coins += coins;
-            Debug.Log($"Coins: {_session.Data.Coins}");
+            _session.Data.Inventory.Add(id, value);
         }
 
         public override void TakeDamage()
         {
             base.TakeDamage();
-            if (_session.Data.Coins > 0)
+            if (CoinsCount > 0)
             {
                 SpawnCoins();
             }
@@ -152,8 +164,8 @@ namespace PixelCrew.Creatures.Hero
 
         private void SpawnCoins()
         {
-            var numCoinsToDispose = Mathf.Min(_session.Data.Coins, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
-            _session.Data.Coins -= numCoinsToDispose; //обновляем количество коинов, которое остается после хита
+            var numCoinsToDispose = Mathf.Min(CoinsCount, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
+            _session.Data.Inventory.Remove("Coin", numCoinsToDispose);
 
             var burst = _hitParticles.emission.GetBurst(0); //получаем бурст из эмиссии
             burst.count = numCoinsToDispose; //передаем количество коинов которое надо выкинуть
@@ -184,24 +196,16 @@ namespace PixelCrew.Creatures.Hero
         //тут мы просто запускаем анимацию
         public override void Attack()
         {
-            if (!_session.Data.IsArmed) return;
+            if (SwordCount <= 0) return;
 
             base.Attack();
         }
-
-        //Производим сами расчеты, в анимационном ивенте на определенном кадре, чтобы нельзя было заспамить
         
-
-        public void ArmHero()
-        {
-            _session.Data.IsArmed = true;
-            UpdateHeroWeapon();
-            Animator.runtimeAnimatorController = _armed;
-        }
         
         private void UpdateHeroWeapon()
         {
-            Animator.runtimeAnimatorController = _session.Data.IsArmed ? _armed : _disarmed;
+            var numSwords = _session.Data.Inventory.Count("Sword");
+            Animator.runtimeAnimatorController = SwordCount > 0 ? _armed : _disarmed;
         }
 
         public void Dash()
@@ -238,6 +242,7 @@ namespace PixelCrew.Creatures.Hero
             if (_throwCooldown.IsReady)
             {
                 Animator.SetTrigger(ThrowKey);
+                _sounds.Play("Range");
                 _throwCooldown.Reset();
             }
         }

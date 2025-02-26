@@ -1,4 +1,4 @@
-﻿using PixelCrew.Components;
+﻿using PixelCrew.Components.Audio;
 using PixelCrew.Components.ColliderBased;
 using PixelCrew.Components.GoBased;
 using UnityEngine;
@@ -23,6 +23,7 @@ namespace PixelCrew.Creatures
         protected Rigidbody2D Rigidbody;
         protected Vector2 Direction;
         protected Animator Animator;
+        protected PlaySoundsComponent _sounds;
         protected bool IsGrounded;
         private bool _isJumping;
         
@@ -36,6 +37,7 @@ namespace PixelCrew.Creatures
         {
             Rigidbody = GetComponent<Rigidbody2D>();
             Animator = GetComponent<Animator>();
+            _sounds = GetComponent<PlaySoundsComponent>();
         }
         
         private void FixedUpdate()
@@ -96,10 +98,16 @@ namespace PixelCrew.Creatures
             if (IsGrounded) //если мы на земле тогда мы просто прыгаем
             {
                 yVelocity += _jumpForce;
-                _particles.Spawn("Jump");
+                DoJumpVfx();
             }
             
             return yVelocity;
+        }
+
+        protected void DoJumpVfx()
+        {
+            _particles.Spawn("Jump");
+            _sounds.Play("Jump");
         }
         
         public void UpdateSpriteDirection(Vector2 direction)
@@ -127,6 +135,7 @@ namespace PixelCrew.Creatures
         public virtual void Attack()
         {
             Animator.SetTrigger(AttackKey);
+            _sounds.Play("Melee");
         }
         
         private void PerformAttack() //бывший OnAttack, поменял потому что происходит конфликт (OnDoAttack у Алексея)

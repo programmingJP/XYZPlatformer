@@ -72,6 +72,11 @@ PrefabInstance:
       propertyPath: _coinsToAdd
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3453738136236384792, guid: 04f2829cfa1cd1a46a28051e625a64ce,
+        type: 3}
+      propertyPath: _count
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8003623359770825178, guid: 04f2829cfa1cd1a46a28051e625a64ce,
         type: 3}
       propertyPath: m_Interpolate

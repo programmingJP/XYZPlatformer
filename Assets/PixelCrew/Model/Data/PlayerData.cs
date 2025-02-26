@@ -1,15 +1,16 @@
 ﻿using System;
 using UnityEngine;
 
-namespace PixelCrew.Model
+namespace PixelCrew.Model.Data
 {
     [Serializable]
     public class PlayerData
     {
-        public int Coins;
+        [SerializeField] private InventoryData _inventory;
+        
         public int Hp;
-        public bool IsArmed;
 
+        public InventoryData Inventory => _inventory;
         public PlayerData Clone()
         {
             //не зависимо от того сколько у нас полей, они будут загнаны в строковые данные json
