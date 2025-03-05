@@ -4,12 +4,14 @@ namespace PixelCrew.Components.ColliderBased
 {
     public class LayerCheck : MonoBehaviour
     {
-        [SerializeField] private LayerMask _layer;
-        [SerializeField] private bool _isTouchingLayer;
-        private Collider2D _collider;
-
+        [SerializeField] protected LayerMask _layer;
+        [SerializeField] protected bool _isTouchingLayer;
+        
         public bool IsTouchingLayer => _isTouchingLayer;
-    
+       
+        //TODO Удалить потом
+        private Collider2D _collider;
+        
         private void Awake()
         {
             _collider = GetComponent<Collider2D>();

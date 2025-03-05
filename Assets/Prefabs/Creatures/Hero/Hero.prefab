@@ -469,6 +469,85 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829088453}
   m_Enabled: 1
+--- !u!1 &2035221370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2035221371}
+  - component: {fileID: 2035221373}
+  - component: {fileID: 2035221372}
+  m_Layer: 12
+  m_Name: HitDrop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2035221371
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035221370}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8778912962307261157}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2035221373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035221370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cebf582f8859344fb7df7a09614db16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _count: 10
+  _drop:
+  - Drop: {fileID: 404035507130366741, guid: 04f2829cfa1cd1a46a28051e625a64ce, type: 3}
+    Probability: 50
+  _onDropCalculated:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2035221372}
+        m_MethodName: StartDrop
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _spawnOnEnable: 0
+--- !u!114 &2035221372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035221370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0c0f79457b03848bb03db144c6f543, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sectorAngle: 220
+  _sectorRotation: 0
+  _waitTime: 0.1
+  _speed: 6
 --- !u!1 &1746094186147190726
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,6 +783,7 @@ Transform:
   - {fileID: 9105381866486859548}
   - {fileID: 1829088454}
   - {fileID: 1211254057}
+  - {fileID: 2035221371}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -750,7 +830,11 @@ MonoBehaviour:
     _value: 1
   _armed: {fileID: 9100000, guid: 5e2dc2bf2bd351b44848a7857c3ea6da, type: 2}
   _disarmed: {fileID: 9100000, guid: 9a8353a0c77583f42979ea74cd6b088e, type: 2}
-  _hitParticles: {fileID: 8778912962372564220}
+  _superThrowCooldown:
+    _value: 1
+  _superThrowParticles: 3
+  _superThrowDelay: 0.2
+  _hitDrop: {fileID: 2035221373}
   _dashDuration: 0.3
   _dashForce: 9
   _dashCooldown: 1
@@ -6015,7 +6099,7 @@ MonoBehaviour:
   _radius: 0.2
   _mask:
     serializedVersion: 2
-    m_Bits: 3895
+    m_Bits: 12087
   _tags:
   - Enemy
   _onOverlapEvent:

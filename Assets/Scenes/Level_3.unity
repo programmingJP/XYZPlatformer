@@ -197,9 +197,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    Coins: 0
+    _inventory:
+      _inventory:
+      - Id: Sword
+        Value: 1
     Hp: 10
-    IsArmed: 1
 --- !u!4 &363806455
 Transform:
   m_ObjectHideFlags: 0
@@ -373,26 +375,6 @@ PrefabInstance:
       propertyPath: _points.Array.data[1]
       value: 
       objectReference: {fileID: 1842961919}
-    - target: {fileID: 8778912962307261153, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.6123247
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778912962307261153, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.7305424
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778912962307261153, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
-        type: 3}
-      propertyPath: m_Offset.x
-      value: 0.056162357
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778912962307261153, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
-        type: 3}
-      propertyPath: m_Offset.y
-      value: -0.02877438
-      objectReference: {fileID: 0}
     - target: {fileID: 8778912962307261157, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
         type: 3}
       propertyPath: m_RootOrder
@@ -452,11 +434,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sharky
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778912962307261158, guid: 42fc3f1c3bb03834688e5fcfab82b27a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42fc3f1c3bb03834688e5fcfab82b27a, type: 3}
@@ -673,6 +650,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2035221373, guid: 84c986a935c3fef438aae18489cc5e6f, type: 3}
+      propertyPath: _spawnOnEnable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8778912962307261157, guid: 84c986a935c3fef438aae18489cc5e6f,
         type: 3}
       propertyPath: m_RootOrder
@@ -732,11 +713,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Hero
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778912963169829112, guid: 84c986a935c3fef438aae18489cc5e6f,
-        type: 3}
-      propertyPath: _mask.m_Bits
-      value: 12087
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84c986a935c3fef438aae18489cc5e6f, type: 3}
@@ -941,7 +917,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353138782}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1353138787
 Camera:
   m_ObjectHideFlags: 0
@@ -993,7 +969,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353138782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.6300964, y: -1.1441549, z: -10}
+  m_LocalPosition: {x: -5.20704, y: -1.1441549, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7963,6 +7939,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Seashell
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901976039195382456, guid: f365010cbe105074cb0c3e6a787ff6bf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6901976039195382458, guid: f365010cbe105074cb0c3e6a787ff6bf,
         type: 3}

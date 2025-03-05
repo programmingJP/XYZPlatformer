@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using PixelCrew.Components;
 using PixelCrew.Components.ColliderBased;
 using PixelCrew.Components.Health;
 using PixelCrew.Model;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace PixelCrew.Creatures.Hero
 {
-    public class Hero : Creature
+    public class Hero : Creature, ICanAddInInventory
     {
         [SerializeField] private CheckCircleOverLap _interactionCheck;
         [SerializeField] private LayerCheck _wallCheck;
@@ -29,8 +30,16 @@ namespace PixelCrew.Creatures.Hero
         [SerializeField] private AnimatorController _armed;
         [SerializeField] private AnimatorController _disarmed;
 
-        [Space] [Header("Particles")]
-        [SerializeField] private ParticleSystem _hitParticles;
+        [Header("Super throw")]
+        [SerializeField] private Cooldown _superThrowCooldown;
+        [SerializeField] private int _superThrowParticles;
+        [SerializeField] private float _superThrowDelay;
+
+        [Space] [Header("Particles")] 
+        [SerializeField] private ProbabilityDropComponent _hitDrop;
+        //[SerializeField] private ParticleSystem _hitParticles;
+        
+        
         
         //TODO DASH
         [SerializeField] private float _dashDuration;
@@ -45,6 +54,7 @@ namespace PixelCrew.Creatures.Hero
         private bool _canDash = true;
 
         private bool _isOnWall;
+        private bool _superThrow;
         private float _defaultGravityScale;
 
         private GameSession _session;
@@ -167,12 +177,8 @@ namespace PixelCrew.Creatures.Hero
             var numCoinsToDispose = Mathf.Min(CoinsCount, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
             _session.Data.Inventory.Remove("Coin", numCoinsToDispose);
 
-            var burst = _hitParticles.emission.GetBurst(0); //получаем бурст из эмиссии
-            burst.count = numCoinsToDispose; //передаем количество коинов которое надо выкинуть
-            _hitParticles.emission.SetBurst(0, burst); //ставим обратно наш бюрст в нужный индекс
-            
-            _hitParticles.gameObject.SetActive(true); //включаем эффект
-            _hitParticles.Play(); //проигрываем эффект
+            _hitDrop.SetCount(numCoinsToDispose);
+            _hitDrop.CalculateDrop();
         }
 
         public void Interact()
@@ -235,16 +241,47 @@ namespace PixelCrew.Creatures.Hero
 
         public void OnDoThrow()
         {
-            _particles.Spawn("Throw");
-        }
-        public void Throw()
-        {
-            if (_throwCooldown.IsReady)
+            if (_superThrow)
             {
-                Animator.SetTrigger(ThrowKey);
-                _sounds.Play("Range");
-                _throwCooldown.Reset();
+                var numThrows = Mathf.Min(_superThrowParticles, SwordCount - 1);
+                StartCoroutine(DoSuperThrow(numThrows));
             }
+            else
+            {
+                ThrowAndRemoveFromInventory();
+            }
+
+            _superThrow = false;
+        }
+
+        private IEnumerator DoSuperThrow(int numThrows)
+        {
+            for (int i = 0; i < numThrows; i++)
+            {
+                ThrowAndRemoveFromInventory();
+                yield return new WaitForSeconds(_superThrowDelay);
+            }
+        }
+
+        private void ThrowAndRemoveFromInventory()
+        {
+            _particles.Spawn("Throw");
+            _session.Data.Inventory.Remove("Sword", 1);
+        }
+
+        public void StartThrowing()
+        {
+            _superThrowCooldown.Reset();
+        }
+
+        public void PerformThrowing()
+        {
+            if (!_throwCooldown.IsReady || SwordCount <= 1) return;
+
+            if (_superThrowCooldown.IsReady) _superThrow = true;
+            
+            Animator.SetTrigger(ThrowKey);
+            _throwCooldown.Reset();
         }
     }
 }

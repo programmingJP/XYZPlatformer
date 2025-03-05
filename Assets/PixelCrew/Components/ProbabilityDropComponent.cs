@@ -65,5 +65,10 @@ namespace PixelCrew.Components
         public class DropEvent : UnityEvent<GameObject[]> //будем передавать все, что нам нужно заспавнить
         {
         }
+
+        public void SetCount(int count)
+        {
+            _count = count;
+        }
     }
 }
