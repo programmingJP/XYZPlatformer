@@ -6,7 +6,7 @@ namespace PixelCrew.Creatures.Hero
 {
    public class HeroInputReader : MonoBehaviour
    {
-      [SerializeField] private Creatures.Hero.Hero _hero;
+      [SerializeField] private Hero _hero;
       
       public void OnMovement(InputAction.CallbackContext context)
       {
@@ -49,6 +49,14 @@ namespace PixelCrew.Creatures.Hero
          if (context.canceled)
          {
             _hero.PerformThrowing();
+         }
+      }
+
+      public void OnUse(InputAction.CallbackContext context)
+      {
+         if (context.performed)
+         {
+            _hero.UsePotion();
          }
       }
    }

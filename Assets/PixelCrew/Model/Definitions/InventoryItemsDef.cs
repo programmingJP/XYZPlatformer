@@ -28,8 +28,10 @@ namespace PixelCrew.Model.Definitions
     public struct ItemDef
     {
         [SerializeField] private string _id;
+        [SerializeField] private bool _isStackable;
 
         public string Id => _id; //проперти чтобы иметь доступ к переменной из вне
+        public bool IsStackable => _isStackable; 
 
         public bool isVoid => string.IsNullOrEmpty(_id);
     }

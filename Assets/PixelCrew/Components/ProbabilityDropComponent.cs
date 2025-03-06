@@ -61,14 +61,14 @@ namespace PixelCrew.Components
             public float Probability; //вероятность выпадения
         }
 
-        [Serializable]
-        public class DropEvent : UnityEvent<GameObject[]> //будем передавать все, что нам нужно заспавнить
-        {
-        }
-
         public void SetCount(int count)
         {
             _count = count;
         }
+    }
+    
+    [Serializable]
+    public class DropEvent : UnityEvent<GameObject[]> //будем передавать все, что нам нужно заспавнить
+    {
     }
 }

@@ -58,6 +58,7 @@ namespace PixelCrew.Creatures.Hero
         private float _defaultGravityScale;
 
         private GameSession _session;
+        private HealthComponent _health;
         
         private int SwordCount => _session.Data.Inventory.Count("Sword");
         private int CoinsCount => _session.Data.Inventory.Count("Coin");
@@ -78,11 +79,11 @@ namespace PixelCrew.Creatures.Hero
         private void Start() //вызываем в старте так как гейм сессион у нас забирается на эвейке
         {
             _session = FindObjectOfType<GameSession>(); // записываем игровую сессию в переменную
-            var health = GetComponent<HealthComponent>();//получаем компонент здоровья
+            _health = GetComponent<HealthComponent>();//получаем компонент здоровья
 
             _session.Data.Inventory.OnChanged += OnInventoryChanged;
             
-            health.SetHealth(_session.Data.Hp); //записываем текущее здоровье в компонент
+            _health.SetHealth(_session.Data.Hp); //записываем текущее здоровье в компонент
             UpdateHeroWeapon();
         }
 
@@ -282,6 +283,17 @@ namespace PixelCrew.Creatures.Hero
             
             Animator.SetTrigger(ThrowKey);
             _throwCooldown.Reset();
+        }
+
+        public void UsePotion()
+        {
+            var potionCount = _session.Data.Inventory.Count("HealthPotion"); //забираем текущие данные
+
+            if (potionCount > 0)
+            {
+                _health.ModifyHealth(3);
+                _session.Data.Inventory.Remove("HealthPotion", 1);
+            }
         }
     }
 }

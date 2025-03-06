@@ -22,24 +22,66 @@ namespace PixelCrew.Model.Data
             var itemDef = DefsFacade.I.Items.Get(id);
             if (itemDef.isVoid) return;
 
+            if (itemDef.IsStackable)
+            {
+                AddToStack(id, value);
+            }
 
+            else
+            {
+                AddNonStack(id,value);
+            }
+            
+            OnChanged?.Invoke(id, Count(id));
+        }
+
+        private void AddToStack(string id, int value)
+        {
+            var isFull = _inventory.Count >= DefsFacade.I.Player.InventorySize;
+            
             var item = GetItem(id);
+            
             if (item == null) //если предмет равен налл
             {
+                if (isFull) return;
+
                 item = new InventoryItemData(id); //мы создаем новый предмет
                 _inventory.Add(item); //добавляем в наш список предметов
             }
 
             item.Value += value; // добавляем количество если предмет уже существует
+        }
+        private void AddNonStack(string id, int value)
+        {
+            var itemLasts = DefsFacade.I.Player.InventorySize - _inventory.Count;
+            value = Mathf.Min(itemLasts, value);
             
-            OnChanged?.Invoke(id, Count(id));
+            for (int i = 0; i < value; i++)
+            {
+                var item = new InventoryItemData(id) {Value = 1};
+                _inventory.Add(item);
+            }
         }
 
         public void Remove(string id, int value)
         {
             var itemDef = DefsFacade.I.Items.Get(id);
             if (itemDef.isVoid) return;
+
+            if (itemDef.IsStackable)
+            {
+                RemoveFromStack(id, value);
+            }
+            else
+            {
+                RemoveNonStack(id, value);
+            }
             
+            OnChanged?.Invoke(id, Count(id));
+        }
+
+        private void RemoveFromStack(string id, int value)
+        {
             var item = GetItem(id); // получаем предмет
             if (item == null) return;// если айтем налл, то выходим
 
@@ -50,8 +92,16 @@ namespace PixelCrew.Model.Data
             {
                 _inventory.Remove(item);
             }
-            
-            OnChanged?.Invoke(id, Count(id));
+        }
+
+        private void RemoveNonStack(string id, int value)
+        {
+            for (int i = 0; i < value; i++)
+            {
+                var item = GetItem(id); // получаем предмет
+                if (item == null) return;// если айтем налл, то выходим
+                _inventory.Remove(item);
+            }
         }
 
         //получаем предмет, если такой предмет уже имеется, то мы возращаем его

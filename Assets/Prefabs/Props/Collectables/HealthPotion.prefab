@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2542718615105098735}
   - component: {fileID: 2542718615105098706}
   - component: {fileID: 2542718615105098728}
-  - component: {fileID: 7217180209030257584}
   - component: {fileID: 2542718615442863311}
+  - component: {fileID: 2750377635004887544}
   m_Layer: 0
   m_Name: HealthPotion
   m_TagString: Untagged
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -257735725
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 3714227102187029162, guid: 989ffe3c6f267f54aaac2de4f88b7669,
     type: 3}
@@ -167,19 +167,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectToDestroy: {fileID: 2542718615105098705}
---- !u!114 &7217180209030257584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2542718615105098705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16fedfc00c3de9f4382ee17650235cad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hpDelta: 3
 --- !u!114 &2542718615442863311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,11 +180,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tag: Player
+  _layer:
+    serializedVersion: 2
+    m_Bits: 4294967295
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217180209030257584}
-        m_MethodName: Apply
+      - m_Target: {fileID: 2542718615105098735}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2750377635004887544}
+        m_MethodName: Add
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -218,3 +219,17 @@ MonoBehaviour:
           m_StringArgument: destroy
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2750377635004887544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2542718615105098705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9453a07ea1f42a58e3175453a583028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: HealthPotion
+  _count: 1
