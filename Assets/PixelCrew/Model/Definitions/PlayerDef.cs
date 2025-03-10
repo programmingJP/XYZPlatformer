@@ -6,7 +6,10 @@ namespace PixelCrew.Model.Definitions
     public class PlayerDef : ScriptableObject
     {
         [SerializeField] private int _invetorySize;
+        [SerializeField] private int _maxHealth;
 
         public int InventorySize => _invetorySize;
+
+        public int MaxHealth => _maxHealth;
     }
 }

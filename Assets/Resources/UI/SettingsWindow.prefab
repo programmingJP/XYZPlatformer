@@ -780,8 +780,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5669731207269542149}
+  - component: {fileID: 98429346}
   m_Layer: 0
-  m_Name: VolumeItem
+  m_Name: MusicOption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -804,6 +805,20 @@ Transform:
   m_Father: {fileID: 7441305189209653497}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &98429346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7069184597723723584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b938a65949eeb78e94be5ddc7d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slider: {fileID: 8607758253539831295}
+  _value: {fileID: 2909122952111882991}
 --- !u!1 &7283254386047041011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,6 +1224,7 @@ GameObject:
   - component: {fileID: 8271888601952334352}
   - component: {fileID: 8271888601952334350}
   - component: {fileID: 8271888601952334353}
+  - component: {fileID: 98429347}
   m_Layer: 5
   m_Name: SettingsWindow
   m_TagString: Untagged
@@ -1267,6 +1283,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b59bc2a50a4bafa63d2768f00f127b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &98429347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271888601952334355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db928016ab6f4991a35eb600d80a95a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _music: {fileID: 98429346}
+  _sfx: {fileID: 98429345}
 --- !u!1 &8271888602203607370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,8 +1387,9 @@ GameObject:
   - component: {fileID: 8271888602238066636}
   - component: {fileID: 8271888602238066639}
   - component: {fileID: 8271888602238066638}
+  - component: {fileID: 4893412591682753735}
   m_Layer: 5
-  m_Name: StartButton
+  m_Name: OkButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1479,6 +1510,19 @@ MonoBehaviour:
         m_CallState: 2
   _normal: {fileID: 8271888600303213601}
   _pressed: {fileID: 8271888602203607370}
+--- !u!114 &4893412591682753735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271888602238066640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3465232f0980434f9d5624ff2f097b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioClip: {fileID: 8300000, guid: 6a6ec83a0d9ea6f45ad0aa07f6b28af3, type: 3}
 --- !u!1 &8382177037967242636
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,8 +1532,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5278764710757414820}
+  - component: {fileID: 98429345}
   m_Layer: 0
-  m_Name: VolumeItem (1)
+  m_Name: SfxOption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1512,3 +1557,17 @@ Transform:
   m_Father: {fileID: 7441305189209653497}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &98429345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8382177037967242636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b938a65949eeb78e94be5ddc7d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slider: {fileID: 4279917022129896331}
+  _value: {fileID: 8291441253310133057}

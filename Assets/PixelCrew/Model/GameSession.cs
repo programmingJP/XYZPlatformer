@@ -1,5 +1,6 @@
 ﻿using PixelCrew.Model.Data;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PixelCrew.Model
 {
@@ -12,6 +13,8 @@ namespace PixelCrew.Model
 
         private void Awake()
         {
+            LoadHud();
+            
             if (IsSessionExit()) //если сессия существует в сцене значит эта появилась второй и ее нужно уничтожить
             {
                 Destroy(gameObject);
@@ -22,6 +25,12 @@ namespace PixelCrew.Model
                 Save();
                 DontDestroyOnLoad(this);
             }
+        }
+
+        private void LoadHud()
+        {
+            //мы не перезаписываем старый худ, а просто добавляем его к новой сессии
+            SceneManager.LoadScene("Hud", LoadSceneMode.Additive);
         }
 
         private bool IsSessionExit()

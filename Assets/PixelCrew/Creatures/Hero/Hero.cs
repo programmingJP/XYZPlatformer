@@ -83,7 +83,7 @@ namespace PixelCrew.Creatures.Hero
 
             _session.Data.Inventory.OnChanged += OnInventoryChanged;
             
-            _health.SetHealth(_session.Data.Hp); //записываем текущее здоровье в компонент
+            _health.SetHealth(_session.Data.Hp.Value); //записываем текущее здоровье в компонент
             UpdateHeroWeapon();
         }
 
@@ -100,7 +100,7 @@ namespace PixelCrew.Creatures.Hero
         
         public void OnHealthChanged(int currentHealth)
         {
-            _session.Data.Hp = currentHealth;
+            _session.Data.Hp.Value = currentHealth;
         }
 
         
