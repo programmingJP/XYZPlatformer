@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrew.Model.Definitions;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace PixelCrew.Model.Data
             var itemDef = DefsFacade.I.Items.Get(id);
             if (itemDef.isVoid) return;
 
-            if (itemDef.IsStackable)
+            if (itemDef.HasTag(ItemTag.Stackable))
             {
                 AddToStack(id, value);
             }
@@ -33,6 +34,21 @@ namespace PixelCrew.Model.Data
             }
             
             OnChanged?.Invoke(id, Count(id));
+        }
+        
+        //фильтр инвентаря по тегам
+        public InventoryItemData[] GetAll(params ItemTag[] tags) //params позволяет принимать не один таг, а любое их количество
+        {
+            var retValue = new List<InventoryItemData>();
+            foreach (var item in _inventory)
+            {
+                var itemDef = DefsFacade.I.Items.Get(item.Id); // получаем дефенишен(описание нашего предмета
+                var isAllRequirementsMet = tags.All(x => itemDef.HasTag(x));
+                if(isAllRequirementsMet)
+                    retValue.Add(item);
+            }
+            
+            return retValue.ToArray();
         }
 
         private void AddToStack(string id, int value)
@@ -68,7 +84,7 @@ namespace PixelCrew.Model.Data
             var itemDef = DefsFacade.I.Items.Get(id);
             if (itemDef.isVoid) return;
 
-            if (itemDef.IsStackable)
+            if (itemDef.HasTag(ItemTag.Stackable))
             {
                 RemoveFromStack(id, value);
             }

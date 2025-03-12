@@ -10,6 +10,7 @@ namespace PixelCrew.Model
         
         public PlayerData Data => _data;
         private PlayerData _save;
+        public QuickInventoryModel QuckInventory { get; private set; } //аксессор
 
         private void Awake()
         {
@@ -23,8 +24,14 @@ namespace PixelCrew.Model
             else //если сессия не существует в сцене значит это первая сессия и ее нужно сохранить между сценами
             {
                 Save();
+                InitModels();
                 DontDestroyOnLoad(this);
             }
+        }
+
+        private void InitModels()
+        {
+            QuckInventory = new QuickInventoryModel(Data);
         }
 
         private void LoadHud()

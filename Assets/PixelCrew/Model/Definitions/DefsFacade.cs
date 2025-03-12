@@ -7,9 +7,11 @@ namespace PixelCrew.Model.Definitions
     {
         //передаем ссылки на наши обьекты
         [SerializeField] private InventoryItemsDef _items;
+        [SerializeField] private ThrowableItemsDef _throwableitems;
         [SerializeField] private PlayerDef _player;
 
         public InventoryItemsDef Items => _items;
+        public ThrowableItemsDef Throwable => _throwableitems;
         public PlayerDef Player => _player;
 
         private static DefsFacade _instance;

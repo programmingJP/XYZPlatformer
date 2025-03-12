@@ -12,7 +12,7 @@ namespace PixelCrew.Components.Collectables
 
         public void Add(GameObject go)
         {
-            var hero = go.GetInterface<ICanAddInInventory>(); //TODO не работает неймспейс нужно будет починить
+            var hero = go.GetInterface<ICanAddInInventory>();
             hero?.AddInInventory(_id, _count);
         }
     }

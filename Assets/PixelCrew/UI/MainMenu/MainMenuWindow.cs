@@ -39,8 +39,6 @@ namespace PixelCrew.UI.MainMenu
         {
             base.OnCloseAnimationComplete();
             _closeAction?.Invoke();
-            
-            
         }
     }
 }

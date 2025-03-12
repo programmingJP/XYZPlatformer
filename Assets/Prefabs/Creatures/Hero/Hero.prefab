@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 1829088455}
   - component: {fileID: 1829088456}
   m_Layer: 12
-  m_Name: Vfx
+  m_Name: AudioListener
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -477,7 +477,7 @@ GameObject:
   - component: {fileID: 8582912111019787647}
   - component: {fileID: 9051816895723006554}
   m_Layer: 12
-  m_Name: ThrowSwordSpawnPosition
+  m_Name: ThrowSpawnPosition
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -706,6 +706,7 @@ MonoBehaviour:
   _superThrowParticles: 3
   _superThrowDelay: 0.2
   _hitDrop: {fileID: 2035221373}
+  _throwSpawner: {fileID: 9051816895723006554}
   _dashDuration: 0.3
   _dashForce: 9
   _dashCooldown: 1
@@ -813,7 +814,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8778912962307261155}
-        m_MethodName: OnUse
+        m_MethodName: OnNextItem
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1052,7 +1053,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc9ddbb8853d24459c7e1385fc1d025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _source: {fileID: 1829088455}
   _sounds:
   - _id: Jump
     _clip: {fileID: 8300000, guid: d2c6c751c41d1bd4a9ad094de43ab09d, type: 3}

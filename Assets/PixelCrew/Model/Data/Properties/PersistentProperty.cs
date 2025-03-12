@@ -1,26 +1,20 @@
-﻿using System;
-using UnityEngine;
-
-namespace PixelCrew.Model.Data.Properties
+﻿namespace PixelCrew.Model.Data.Properties
 {
-    [Serializable]
-    public abstract class PersistentProperty<TPropertyType>
+    //[Serializable]
+    public abstract class PersistentProperty<TPropertyType> : ObservableProperty<TPropertyType>
     {
-        [SerializeField] protected TPropertyType _value; //то что будет отображаться в инспекторе
         protected TPropertyType _stored; //что что будет записано непосредственно на самом диске
         
         private TPropertyType _defaultValue;
-
-        public delegate void OnPropertyChanged(TPropertyType newValue, TPropertyType oldValue);
-
-        public event OnPropertyChanged OnChanged;
-
+        
+        //public event OnPropertyChanged OnChanged;
+        
         public PersistentProperty(TPropertyType defaultValue)
         {
             _defaultValue = defaultValue;
         }
 
-        public TPropertyType Value
+        public override TPropertyType Value
         {
             get => _stored;
             set
@@ -34,7 +28,8 @@ namespace PixelCrew.Model.Data.Properties
                 Write(value);
                 _stored = _value = value;
                 
-                OnChanged?.Invoke(value, oldValue);
+                //OnChanged?.Invoke(value, oldValue);
+                InvokeOnChangedEvent(value, oldValue);
             }
         }
 

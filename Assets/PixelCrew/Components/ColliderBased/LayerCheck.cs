@@ -8,8 +8,7 @@ namespace PixelCrew.Components.ColliderBased
         [SerializeField] protected bool _isTouchingLayer;
         
         public bool IsTouchingLayer => _isTouchingLayer;
-       
-        //TODO Удалить потом
+        
         private Collider2D _collider;
         
         private void Awake()
