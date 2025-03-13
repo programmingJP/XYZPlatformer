@@ -15231,6 +15231,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 219030768}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2064003416 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 95897991382817769, guid: f03955c780c10c741a74d5a8552f96d4,
+    type: 3}
+  m_PrefabInstance: {fileID: 95897991704252736}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2064003417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064003416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e259adf496d4575876683a0de8d68d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mode: 0
+  _bound:
+    _sentences:
+    - U need a key...
+    - Try to searching in upper floors!
+  _external: {fileID: 0}
 --- !u!4 &2081730520 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1173799678456748363, guid: 579c7d598e8cb6744832de186be2324d,
@@ -15657,6 +15681,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 812315899}
     m_Modifications:
+    - target: {fileID: 1457370554, guid: f03955c780c10c741a74d5a8552f96d4, type: 3}
+      propertyPath: _onFail.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457370554, guid: f03955c780c10c741a74d5a8552f96d4, type: 3}
+      propertyPath: _onFail.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457370554, guid: f03955c780c10c741a74d5a8552f96d4, type: 3}
+      propertyPath: _onFail.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2064003417}
+    - target: {fileID: 1457370554, guid: f03955c780c10c741a74d5a8552f96d4, type: 3}
+      propertyPath: _onFail.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457370554, guid: f03955c780c10c741a74d5a8552f96d4, type: 3}
+      propertyPath: _onFail.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Show
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457370554, guid: f03955c780c10c741a74d5a8552f96d4, type: 3}
+      propertyPath: _onFail.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 95897991382817769, guid: f03955c780c10c741a74d5a8552f96d4,
         type: 3}
       propertyPath: m_Name

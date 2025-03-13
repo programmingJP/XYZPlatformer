@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PixelCrew.Model;
 using PixelCrew.Utils.Disposables;
 using UnityEngine;
@@ -43,6 +44,11 @@ namespace PixelCrew.UI.Hud.QuickInventory
             {
                 _createdItem[i].gameObject.SetActive(false);
             }
+        }
+
+        private void OnDestroy()
+        {
+            _trash.Dispose();
         }
     }
 }
