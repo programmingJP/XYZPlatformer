@@ -1,6 +1,7 @@
 ﻿using PixelCrew.Model;
 using PixelCrew.Model.Definitions;
 using PixelCrew.UI.Widgets;
+using PixelCrew.Utils;
 using UnityEngine;
 
 namespace PixelCrew.UI.Hud
@@ -25,6 +26,11 @@ namespace PixelCrew.UI.Hud
             _healthBar.SetProgress(value);
         }
 
+        public void OnSettings()
+        {
+            WindowUtils.CreateWindow("UI/InGameMainMenu");
+        }
+        
         private void OnDestroy()
         {
             _session.Data.Hp.OnChanged -= OnHealthChanged;

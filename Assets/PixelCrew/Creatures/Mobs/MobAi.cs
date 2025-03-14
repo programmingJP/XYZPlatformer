@@ -15,6 +15,8 @@ namespace PixelCrew.Creatures.Mobs
         [SerializeField] private float _attackCooldown = 1f;
         [SerializeField] private float _missCooldown = 0.5f;
 
+        [SerializeField] private float _horizontalTrashold = 0.2f;
+
         private IEnumerator _current;
         private GameObject _target;
 
@@ -73,8 +75,12 @@ namespace PixelCrew.Creatures.Mobs
                     StarState(Attack());
                 }
                 else
-                { 
-                    SetDirectionToTarget();
+                {
+                    var horizontalDelta = Mathf.Abs(_target.transform.position.x - transform.position.x);//используем абсолютное значение, так как оно может быть как слева так и справа
+                    if(horizontalDelta <= _horizontalTrashold)
+                        _creature.SetDirection(Vector2.zero);
+                    else
+                        SetDirectionToTarget();
                 }
                 
                 yield return null;//пропускаем один кадр
