@@ -21,7 +21,7 @@ namespace PixelCrew.UI.Hud.QuickInventory
         private void Start()
         {
             var session = FindObjectOfType<GameSession>();
-            var index = session.QuckInventory.SelectedIndex;
+            var index = session.QuickInventory.SelectedIndex;
 
             _trash.Retain(index.SubscribeAndInvoke(OnIndexChanged));
         }

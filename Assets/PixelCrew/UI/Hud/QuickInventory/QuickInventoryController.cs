@@ -23,14 +23,14 @@ namespace PixelCrew.UI.Hud.QuickInventory
         {
             _dataGroup = new DataGroup<InventoryItemData, InventoryItemWidget>(_prefab, _container);
             _session = FindObjectOfType<GameSession>();
-            _trash.Retain(_session.QuckInventory.Subscribe(Rebuild));
+            _trash.Retain(_session.QuickInventory.Subscribe(Rebuild));
 
             Rebuild();
         }
 
         private void Rebuild()
         {
-            var inventory = _session.QuckInventory.Inventory;
+            var inventory = _session.QuickInventory.Inventory;
             _dataGroup.SetData(inventory);
         }
 

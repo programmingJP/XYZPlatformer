@@ -67,7 +67,7 @@ namespace PixelCrew.Creatures.Hero
         private int SwordCount => _session.Data.Inventory.Count(SwordId);
         private int CoinsCount => _session.Data.Inventory.Count("Coin");
 
-        private string SelectedItemId => _session.QuckInventory.SelectedItem.Id;
+        private string SelectedItemId => _session.QuickInventory.SelectedItem.Id;
 
         private bool CanThrow
         {
@@ -289,7 +289,7 @@ namespace PixelCrew.Creatures.Hero
         {
             //Sounds.Play("Range");
             
-            var throwableId = _session.QuckInventory.SelectedItem.Id;
+            var throwableId = _session.QuickInventory.SelectedItem.Id;
             var throwableDef = DefsFacade.I.Throwable.Get(throwableId);
             _throwSpawner.SetPrefab(throwableDef.Projectile);
             _throwSpawner.Spawn();
@@ -327,7 +327,7 @@ namespace PixelCrew.Creatures.Hero
 
         public void NextItem()
         {
-            _session.QuckInventory.SetNextItem();
+            _session.QuickInventory.SetNextItem();
         }
     }
 }
