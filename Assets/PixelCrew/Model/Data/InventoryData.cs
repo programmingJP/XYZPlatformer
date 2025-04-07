@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrew.Model.Definitions;
+using PixelCrew.Model.Definitions.Repositories;
+using PixelCrew.Model.Definitions.Repositories.Items;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PixelCrew.Model.Data
 {
@@ -15,64 +18,60 @@ namespace PixelCrew.Model.Data
 
         public OnInventoryChanged OnChanged;
 
-        //метод для добавления обьекта в инвентарь
         public void Add(string id, int value)
         {
-            if(value <= 0) return;
+            if (value <= 0) return;
 
             var itemDef = DefsFacade.I.Items.Get(id);
-            if (itemDef.isVoid) return;
+            if (itemDef.IsVoid) return;
 
             if (itemDef.HasTag(ItemTag.Stackable))
             {
                 AddToStack(id, value);
             }
-
             else
             {
-                AddNonStack(id,value);
+                AddNonStack(id, value);
             }
-            
+
             OnChanged?.Invoke(id, Count(id));
         }
-        
-        //фильтр инвентаря по тегам
-        public InventoryItemData[] GetAll(params ItemTag[] tags) //params позволяет принимать не один таг, а любое их количество
+
+        public InventoryItemData[] GetAll(params ItemTag[] tags)
         {
             var retValue = new List<InventoryItemData>();
             foreach (var item in _inventory)
             {
-                var itemDef = DefsFacade.I.Items.Get(item.Id); // получаем дефенишен(описание нашего предмета
+                var itemDef = DefsFacade.I.Items.Get(item.Id);
                 var isAllRequirementsMet = tags.All(x => itemDef.HasTag(x));
-                if(isAllRequirementsMet)
+                if (isAllRequirementsMet)
                     retValue.Add(item);
             }
-            
+
             return retValue.ToArray();
         }
 
         private void AddToStack(string id, int value)
         {
             var isFull = _inventory.Count >= DefsFacade.I.Player.InventorySize;
-            
             var item = GetItem(id);
-            
-            if (item == null) //если предмет равен налл
+            if (item == null)
             {
                 if (isFull) return;
 
-                item = new InventoryItemData(id); //мы создаем новый предмет
-                _inventory.Add(item); //добавляем в наш список предметов
+                item = new InventoryItemData(id);
+                _inventory.Add(item);
             }
 
-            item.Value += value; // добавляем количество если предмет уже существует
+            item.Value += value;
         }
+
         private void AddNonStack(string id, int value)
         {
             var itemLasts = DefsFacade.I.Player.InventorySize - _inventory.Count;
             value = Mathf.Min(itemLasts, value);
-            
-            for (int i = 0; i < value; i++)
+
+            for (var i = 0; i < value; i++)
             {
                 var item = new InventoryItemData(id) {Value = 1};
                 _inventory.Add(item);
@@ -82,7 +81,7 @@ namespace PixelCrew.Model.Data
         public void Remove(string id, int value)
         {
             var itemDef = DefsFacade.I.Items.Get(id);
-            if (itemDef.isVoid) return;
+            if (itemDef.IsVoid) return;
 
             if (itemDef.HasTag(ItemTag.Stackable))
             {
@@ -92,43 +91,38 @@ namespace PixelCrew.Model.Data
             {
                 RemoveNonStack(id, value);
             }
-            
+
             OnChanged?.Invoke(id, Count(id));
         }
 
         private void RemoveFromStack(string id, int value)
         {
-            var item = GetItem(id); // получаем предмет
-            if (item == null) return;// если айтем налл, то выходим
+            var item = GetItem(id);
+            if (item == null) return;
 
-            item.Value -= value; // если предмет есть отнимаем количество
+            item.Value -= value;
 
-            //если количество меньше либо равно нулю, то удаляем предмет из инвенторя
             if (item.Value <= 0)
-            {
                 _inventory.Remove(item);
-            }
         }
 
         private void RemoveNonStack(string id, int value)
         {
             for (int i = 0; i < value; i++)
             {
-                var item = GetItem(id); // получаем предмет
-                if (item == null) return;// если айтем налл, то выходим
+                var item = GetItem(id);
+                if (item == null) return;
+
                 _inventory.Remove(item);
             }
         }
 
-        //получаем предмет, если такой предмет уже имеется, то мы возращаем его
         private InventoryItemData GetItem(string id)
         {
             foreach (var itemData in _inventory)
             {
                 if (itemData.Id == id)
-                {
-                    return itemData; 
-                }
+                    return itemData;
             }
 
             return null;
@@ -140,19 +134,40 @@ namespace PixelCrew.Model.Data
             foreach (var item in _inventory)
             {
                 if (item.Id == id)
-                    return item.Value;
+                    count += item.Value;
             }
 
             return count;
         }
+
+
+        public bool IsEnough(params ItemWithCount[] items)
+        {
+            var joined = new Dictionary<string, int>();
+
+            foreach (var item in items)
+            {
+                if (joined.ContainsKey(item.ItemId))
+                    joined[item.ItemId] += item.Count;
+                else
+                    joined.Add(item.ItemId, item.Count);
+            }
+
+            foreach (var kvp in joined)
+            {
+                var count = Count(kvp.Key);
+                if (count < kvp.Value) return false;
+            }
+
+            return true;
+        }
     }
 
-    //Сам предмет
     [Serializable]
     public class InventoryItemData
     {
-       [InventoryId] public string Id; //индефикатор
-        public int Value; //количество
+        [InventoryId] public string Id;
+        public int Value;
 
         public InventoryItemData(string id)
         {

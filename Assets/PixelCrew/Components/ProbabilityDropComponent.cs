@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,8 +7,8 @@ namespace PixelCrew.Components
 {
     public class ProbabilityDropComponent : MonoBehaviour
     {
-        [SerializeField] private int _count; //количество выпадающих элементов
-        [SerializeField] private DropData[] _drop; //ссылки на префабы
+        [SerializeField] private int _count;
+        [SerializeField] private DropData[] _drop;
         [SerializeField] private DropEvent _onDropCalculated;
         [SerializeField] private bool _spawnOnEnable;
 
@@ -24,19 +24,14 @@ namespace PixelCrew.Components
         public void CalculateDrop()
         {
             var itemsToDrop = new GameObject[_count];
-            
-            //Нужно пройтись в цикле и сделать вероятность выпадения
             var itemCount = 0;
-
-            var total = _drop.Sum(dropData => dropData.Probability); //сумма вероятностей (общая вероятность)
-            var sortedDrop = _drop.OrderBy(dropData => dropData.Probability); //сортируем по вероятности
+            var total = _drop.Sum(dropData => dropData.Probability);
+            var sortedDrop = _drop.OrderBy(dropData => dropData.Probability).ToArray();
 
             while (itemCount < _count)
             {
                 var random = UnityEngine.Random.value * total;
                 var current = 0f;
-                
-                //Если наше число совпадает с рандомом, то мы добавляем элемент в массив
                 foreach (var dropData in sortedDrop)
                 {
                     current += dropData.Probability;
@@ -48,17 +43,16 @@ namespace PixelCrew.Components
                     }
                 }
             }
-            
-            _onDropCalculated.Invoke(itemsToDrop); //вызываем событие и передаем туда массив элементов, которые нам нужно выкинуть
+
+            _onDropCalculated?.Invoke(itemsToDrop);
         }
 
 
         [Serializable]
         public class DropData
         {
-            public GameObject Drop; //ссылка на префаб
-            [Range(0, 100f)]
-            public float Probability; //вероятность выпадения
+            public GameObject Drop;
+            [Range(0f, 100f)] public float Probability;
         }
 
         public void SetCount(int count)
@@ -66,9 +60,9 @@ namespace PixelCrew.Components
             _count = count;
         }
     }
-    
+
     [Serializable]
-    public class DropEvent : UnityEvent<GameObject[]> //будем передавать все, что нам нужно заспавнить
+    public class DropEvent : UnityEvent<GameObject[]>
     {
     }
 }

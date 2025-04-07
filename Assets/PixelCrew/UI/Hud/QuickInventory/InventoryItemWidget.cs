@@ -1,6 +1,7 @@
-﻿using PixelCrew.Model;
+using PixelCrew.Model;
 using PixelCrew.Model.Data;
 using PixelCrew.Model.Definitions;
+using PixelCrew.Model.Definitions.Repositories.Items;
 using PixelCrew.UI.Widgets;
 using PixelCrew.Utils.Disposables;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace PixelCrew.UI.Hud.QuickInventory
         [SerializeField] private Image _icon;
         [SerializeField] private GameObject _selection;
         [SerializeField] private Text _value;
-        
+
         private readonly CompositeDisposable _trash = new CompositeDisposable();
 
         private int _index;
@@ -22,7 +23,6 @@ namespace PixelCrew.UI.Hud.QuickInventory
         {
             var session = FindObjectOfType<GameSession>();
             var index = session.QuickInventory.SelectedIndex;
-
             _trash.Retain(index.SubscribeAndInvoke(OnIndexChanged));
         }
 
@@ -34,8 +34,8 @@ namespace PixelCrew.UI.Hud.QuickInventory
         public void SetData(InventoryItemData item, int index)
         {
             _index = index;
-            var def = DefsFacade.I.Items.Get(item.Id); //получаем айдишку дефенишена
-            _icon.sprite = def.Icon; //получаем иконку
+            var def = DefsFacade.I.Items.Get(item.Id);
+            _icon.sprite = def.Icon;
             _value.text = def.HasTag(ItemTag.Stackable) ? item.Value.ToString() : string.Empty;
         }
 

@@ -12,10 +12,10 @@ namespace PixelCrew.Animations
         [SerializeField] private AnimationClip[] _clips;
 
         private SpriteRenderer _renderer;
-        
-        private float _secondsPerFrame;
-        private float _nextFrameTime; //Время когда мы должны обновить наш спрайт
-        private int _currentFrame; //Номер текущего спрайта
+
+        private float _secPerFrame;
+        private float _nextFrameTime;
+        private int _currentFrame;
         private bool _isPlaying = true;
 
         private int _currentClip;
@@ -23,7 +23,7 @@ namespace PixelCrew.Animations
         private void Start()
         {
             _renderer = GetComponent<SpriteRenderer>();
-            _secondsPerFrame = 1f / _frameRate; //В одну секунду из одной секунды у нас получится наша переменная
+            _secPerFrame = 1f / _frameRate;
 
             StartAnimation();
         }
@@ -40,7 +40,7 @@ namespace PixelCrew.Animations
 
         public void SetClip(string clipName)
         {
-            for (int i = 0; i < _clips.Length; i++)
+            for (var i = 0; i < _clips.Length; i++)
             {
                 if (_clips[i].Name == clipName)
                 {
@@ -49,6 +49,7 @@ namespace PixelCrew.Animations
                     return;
                 }
             }
+
             enabled = _isPlaying = false;
         }
 
@@ -83,15 +84,16 @@ namespace PixelCrew.Animations
                     if (clip.AllowNextClip)
                     {
                         _currentFrame = 0;
-                        _currentClip = (int)Mathf.Repeat(_currentClip + 1, _clips.Length);
+                        _currentClip = (int) Mathf.Repeat(_currentClip + 1, _clips.Length);
                     }
                 }
+
                 return;
             }
 
             _renderer.sprite = clip.Sprites[_currentFrame];
-            
-            _nextFrameTime += _secondsPerFrame;
+
+            _nextFrameTime += _secPerFrame;
             _currentFrame++;
         }
     }
@@ -104,7 +106,7 @@ namespace PixelCrew.Animations
         [SerializeField] private bool _loop;
         [SerializeField] private bool _allowNextClip;
         [SerializeField] private UnityEvent _onComplete;
-        
+
         public string Name => _name;
         public Sprite[] Sprites => _sprites;
         public bool Loop => _loop;

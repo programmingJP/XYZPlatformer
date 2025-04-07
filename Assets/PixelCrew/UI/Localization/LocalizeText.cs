@@ -1,4 +1,3 @@
-﻿using System;
 using PixelCrew.Model.Definitions.Localization;
 using UnityEngine;
 using UnityEngine.UI;

@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9823c55c97160ec4489ec1fab77bdb11, type: 3}
+  m_Script: {fileID: 11500000, guid: 04feb2a86c474ceca8d7978ac06ab306, type: 3}
   m_Name: ru
   m_EditorClassIdentifier: 
-  _url: https://docs.google.com/spreadsheets/d/e/2PACX-1vRD7djPAS50Ic_gQQirUxireEPxAoP2e7x4FBqJ_LFOI4stmH5veczCkN6azyT0Y-Y5qJWGYefwlVEL/pub?gid=1063147226&single=true&output=tsv
+  _url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQN5nVsGODsv2C_X6uXW_V5HvtAogb3qUkSndElm3QVL68A_JlU7DaENpJ21ts9njiI9J5TuW0lL5y8/pub?gid=1431137232&single=true&output=tsv
   _localeItems:
   - Key: menu_title
     Value: "\u043C\u0435\u043D\u044E\r"
@@ -23,7 +23,7 @@ MonoBehaviour:
   - Key: button_exit
     Value: "\u0432\u044B\u0445\u043E\u0434\r"
   - Key: selected_language
-    Value: "\u0412\u044B\u0431\u0440\u0430\u043D \u044F\u0437\u044B\u043A {0}\r"
+    Value: "\u0412\u044B\u0431\u0440\u0430\u043D \u044F\u0437\u044B\u043A: {0}\r"
   - Key: button_back
     Value: "\u043D\u0430\u0437\u0430\u0434\r"
   - Key: button_locales

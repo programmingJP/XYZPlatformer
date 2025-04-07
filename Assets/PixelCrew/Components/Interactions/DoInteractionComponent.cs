@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PixelCrew.Components.Interactions
 {
@@ -7,7 +7,7 @@ namespace PixelCrew.Components.Interactions
         public void DoInteraction(GameObject go)
         {
             var interactable = go.GetComponent<InteractableComponent>();
-            if (interactable != null) 
+            if (interactable != null)
                 interactable.Interact();
         }
     }

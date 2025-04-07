@@ -1,26 +1,27 @@
-﻿using System.Collections;
+using System.Collections;
 using PixelCrew.Utils;
 using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace PixelCrew.Components.GoBased
 {
     public class RandomSpawner : MonoBehaviour
     {
-        [Header("Spawn bound:")]
-        [SerializeField] private float _sectorAngle = 60;
+        [Header("Spawn bound:")] [SerializeField]
+        private float _sectorAngle = 60;
+
         [SerializeField] private float _sectorRotation;
-        
+
         [SerializeField] private float _waitTime = 0.1f;
         [SerializeField] private float _speed = 6;
 
-
         private Coroutine _routine;
-        
 
         public void StartDrop(GameObject[] items)
         {
             TryStopRoutine();
+
             _routine = StartCoroutine(StartSpawn(items));
         }
 
@@ -76,8 +77,10 @@ namespace PixelCrew.Components.GoBased
         private Vector3 GetUnitOnCircle(float angleDegrees)
         {
             var angleRadians = angleDegrees * Mathf.PI / 180.0f;
+
             var x = Mathf.Cos(angleRadians);
             var y = Mathf.Sin(angleRadians);
+
             return new Vector3(x, y, 0);
         }
 
@@ -94,10 +97,7 @@ namespace PixelCrew.Components.GoBased
         private void TryStopRoutine()
         {
             if (_routine != null)
-            {
                 StopCoroutine(_routine);
-                _routine = null;
-            }
         }
     }
 }

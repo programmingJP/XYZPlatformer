@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PixelCrew.Model.Data;
 using PixelCrew.Model.Data.Properties;
 using UnityEngine;
@@ -9,9 +9,9 @@ namespace PixelCrew.Components.Audio
     public class AudioSettingComponent : MonoBehaviour
     {
         [SerializeField] private SoundSetting _mode;
-
         private AudioSource _source;
         private FloatPersistentProperty _model;
+
         private void Start()
         {
             _source = GetComponent<AudioSource>();

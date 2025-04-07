@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PixelCrew.Components.ColliderBased
 {
@@ -14,7 +14,7 @@ namespace PixelCrew.Components.ColliderBased
         }
 
 #if UNITY_EDITOR
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
             UnityEditor.Handles.DrawLine(transform.position, _target.position);
         }

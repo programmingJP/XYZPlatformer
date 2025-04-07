@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using PixelCrew.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace PixelCrew.UI.Windows.MainMenu
+namespace PixelCrew.UI.MainMenu
 {
     public class MainMenuWindow : AnimatedWindow
     {
         private Action _closeAction;
-        
+
         public void OnShowSettings()
         {
             WindowUtils.CreateWindow("UI/SettingsWindow");
@@ -16,7 +16,7 @@ namespace PixelCrew.UI.Windows.MainMenu
 
         public void OnStartGame()
         {
-            _closeAction = () => { SceneManager.LoadScene("Level_1"); };
+            _closeAction = () => { SceneManager.LoadScene("Level1"); };
             Close();
         }
 
@@ -38,11 +38,10 @@ namespace PixelCrew.UI.Windows.MainMenu
             Close();
         }
 
-        //Метод выхода из приложения(закрытие)
         public override void OnCloseAnimationComplete()
         {
-            base.OnCloseAnimationComplete();
             _closeAction?.Invoke();
+            base.OnCloseAnimationComplete();
         }
     }
 }

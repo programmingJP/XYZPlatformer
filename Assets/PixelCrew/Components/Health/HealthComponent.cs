@@ -13,11 +13,11 @@ namespace PixelCrew.Components.Health
         [SerializeField] public HealthChangeEvent _onChange;
 
         public int Health => _health;
-
+        
         public void ModifyHealth(int healthDelta)
         {
             if (_health <= 0) return;
-            
+
             _health += healthDelta;
             _onChange?.Invoke(_health);
 
@@ -39,14 +39,12 @@ namespace PixelCrew.Components.Health
 
 #if UNITY_EDITOR
         [ContextMenu("Update Health")]
-
         private void UpdateHealth()
         {
             _onChange?.Invoke(_health);
         }
 #endif
 
-        //метод для инициализации хп
         public void SetHealth(int health)
         {
             _health = health;

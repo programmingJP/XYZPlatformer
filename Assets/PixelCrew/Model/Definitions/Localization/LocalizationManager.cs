@@ -1,21 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using PixelCrew.Model.Data.Properties;
-using PixelCrew.UI.Localization;
 using UnityEngine;
 
 namespace PixelCrew.Model.Definitions.Localization
 {
-    public class LocalizationManager : MonoBehaviour
+    public class LocalizationManager
     {
         public readonly static LocalizationManager I;
 
         private StringPersistentProperty _localeKey = new StringPersistentProperty("en", "localization/current");
-
         private Dictionary<string, string> _localization;
 
         public event Action OnLocaleChanged;
-        public string LocalKey => _localeKey.Value;
+        public string LocaleKey => _localeKey.Value;
 
         static LocalizationManager()
         {

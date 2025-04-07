@@ -1,4 +1,4 @@
-﻿using PixelCrew.Components.Health;
+using PixelCrew.Components.Health;
 using PixelCrew.Utils.Disposables;
 using UnityEngine;
 
@@ -10,8 +10,8 @@ namespace PixelCrew.UI.Widgets
         [SerializeField] private HealthComponent _hp;
 
         private readonly CompositeDisposable _trash = new CompositeDisposable();
-
         private int _maxHp;
+
         private void Start()
         {
             if (_hp == null)

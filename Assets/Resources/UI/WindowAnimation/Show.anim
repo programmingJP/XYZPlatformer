@@ -49,7 +49,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Pannel
+    path: Panel
   m_FloatCurves:
   - curve:
       serializedVersion: 2
@@ -67,7 +67,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Alpha
-    path: Pannel
+    path: Panel
     classID: 225
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -79,14 +79,14 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3693093666
+      path: 1668086795
       attribute: 3
       script: {fileID: 0}
       typeID: 4
       customType: 0
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3693093666
+      path: 1668086795
       attribute: 1574349066
       script: {fileID: 0}
       typeID: 225
@@ -130,7 +130,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Alpha
-    path: Pannel
+    path: Panel
     classID: 225
     script: {fileID: 0}
   - curve:
@@ -167,7 +167,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: Pannel
+    path: Panel
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -204,7 +204,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: Pannel
+    path: Panel
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -241,7 +241,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: Pannel
+    path: Panel
     classID: 224
     script: {fileID: 0}
   m_EulerEditorCurves: []

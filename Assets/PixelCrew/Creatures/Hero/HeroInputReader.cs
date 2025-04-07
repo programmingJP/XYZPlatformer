@@ -1,63 +1,52 @@
-﻿using UnityEngine;
+﻿using PixelCrew.Creatures.Hero;
+using UnityEngine;
 using UnityEngine.InputSystem;
-using Vector2 = UnityEngine.Vector2;
 
-namespace PixelCrew.Creatures.Hero
+namespace PixelCrew
 {
-   public class HeroInputReader : MonoBehaviour
-   {
-      [SerializeField] private Hero _hero;
-      
-      public void OnMovement(InputAction.CallbackContext context)
-      {
-         Vector2 direction = context.ReadValue<Vector2>();
-      
-         _hero.SetDirection(direction);
-      }
+    public class HeroInputReader : MonoBehaviour
+    {
+        [SerializeField] private Hero _hero;
 
-      public void OnInteract(InputAction.CallbackContext context)
-      {
-         if (context.performed)
-         {
-            _hero.Interact();
-         }
-      }
+        public void OnMovement(InputAction.CallbackContext context)
+        {
+            var direction = context.ReadValue<Vector2>();
+            _hero.SetDirection(direction);
+        }
 
-      public void OnAttack(InputAction.CallbackContext context)
-      {
-         if (context.performed)
-         {
-            _hero.Attack();
-         }
-      }
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                _hero.Interact();
+            }
+        }
 
-      public void OnDash(InputAction.CallbackContext context)
-      {
-         if (context.started)
-         {
-            _hero.Dash();
-         }
-      }
+        public void OnAttack(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                _hero.Attack();
+            }
+        }
 
-      public void OnThrow(InputAction.CallbackContext context)
-      {
-         if (context.started)
-         {
-            _hero.StartThrowing();
-         }
+        public void OnThrow(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                _hero.StartThrowing();
+            }
 
-         if (context.canceled)
-         {
-            _hero.PerformThrowing();
-         }
-      }
+            if (context.canceled)
+            {
+                _hero.UseInventory();
+            }
+        }
 
-      public void OnNextItem(InputAction.CallbackContext context)
-      {
-         if (context.performed)
-         {
-            _hero.NextItem();
-         }
-      }
-   }
+        public void OnNextItem(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+                _hero.NextItem();
+        }
+    }
 }

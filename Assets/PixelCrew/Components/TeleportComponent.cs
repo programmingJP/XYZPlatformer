@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,30 +6,28 @@ namespace PixelCrew.Components
 {
     public class TeleportComponent : MonoBehaviour
     {
-        [SerializeField] private Transform _destenationTransform;
-        [SerializeField] private float _alfaTime = 1f;
-        [SerializeField] private float _moveTime = 1f;
+        [SerializeField] private Transform _destTransform;
+        [SerializeField] private float _alphaTime = 1;
+        [SerializeField] private float _moveTime = 1;
 
-        public void Teleport(GameObject target) //target - это тот обьект который мы будем перемещать
+        public void Teleport(GameObject target)
         {
-            //target.transform.position = _destenationTransform.position;
-
             StartCoroutine(AnimateTeleport(target));
         }
 
         private IEnumerator AnimateTeleport(GameObject target)
         {
             var sprite = target.GetComponent<SpriteRenderer>();
-            var input = target.GetComponent<PlayerInput>();//получаем спрайт
+            var input = target.GetComponent<PlayerInput>();
             SetLockInput(input, true);
-            
-            yield return AlphaAnimation(sprite, 0f);
+
+            yield return AlphaAnimation(sprite, 0);
             target.SetActive(false);
-            
+
             yield return MoveAnimation(target);
-            
+
             target.SetActive(true);
-            yield return AlphaAnimation(sprite, 1f);
+            yield return AlphaAnimation(sprite, 1);
             SetLockInput(input, false);
         }
 
@@ -48,8 +46,7 @@ namespace PixelCrew.Components
             {
                 moveTime += Time.deltaTime;
                 var progress = moveTime / _moveTime;
-                target.transform.position =
-                    Vector3.Lerp(target.transform.position, _destenationTransform.position, progress);
+                target.transform.position = Vector3.Lerp(target.transform.position, _destTransform.position, progress);
 
                 yield return null;
             }
@@ -58,17 +55,14 @@ namespace PixelCrew.Components
         private IEnumerator AlphaAnimation(SpriteRenderer sprite, float destAlpha)
         {
             var time = 0f;
-            var spriteAlpha = sprite.color.a; //получаем прозрачность спрайта
-
-            while (time < _alfaTime) //пока время меньше настройки нашего времени, мы будем выполнять код
+            var spriteAlpha = sprite.color.a;
+            while (time < _alphaTime)
             {
                 time += Time.deltaTime;
-                var progress = time / _alfaTime;
-                var temprorarypAlpha = Mathf.Lerp(spriteAlpha, destAlpha, progress);
-
+                var progress = time / _alphaTime;
+                var tmpAlpha = Mathf.Lerp(spriteAlpha, destAlpha, progress);
                 var color = sprite.color;
-                color.a = temprorarypAlpha;
-
+                color.a = tmpAlpha;
                 sprite.color = color;
 
                 yield return null;

@@ -1,4 +1,4 @@
-﻿using PixelCrew.Model;
+using PixelCrew.Model;
 using PixelCrew.Model.Data;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,19 +12,18 @@ namespace PixelCrew.Components.Interactions
 
         [SerializeField] private UnityEvent _onSuccess;
         [SerializeField] private UnityEvent _onFail;
-        
+
         public void Check()
         {
             var session = FindObjectOfType<GameSession>();
             var areAllRequirementsMet = true;
-
             foreach (var item in _required)
             {
                 var numItems = session.Data.Inventory.Count(item.Id);
                 if (numItems < item.Value)
                     areAllRequirementsMet = false;
             }
-            
+
             if (areAllRequirementsMet)
             {
                 if (_removeAfterUse)
@@ -32,10 +31,9 @@ namespace PixelCrew.Components.Interactions
                     foreach (var item in _required)
                         session.Data.Inventory.Remove(item.Id, item.Value);
                 }
-                
+
                 _onSuccess?.Invoke();
             }
-
             else
             {
                 _onFail?.Invoke();

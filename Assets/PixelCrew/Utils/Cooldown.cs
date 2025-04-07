@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace PixelCrew.Utils
@@ -9,12 +9,20 @@ namespace PixelCrew.Utils
         [SerializeField] private float _value;
 
         private float _timesUp;
+
+        public float Value
+        {
+            get => _value;
+            set => _value = value;
+        }
+
         public void Reset()
         {
             _timesUp = Time.time + _value;
         }
-        
-        //проверяем что таймс ап меньше чем тайм.тайм (если меньше то время вышло)
-        public bool IsReady => _timesUp <= Time.time; 
+
+        public float TimeLasts => Mathf.Max(_timesUp - Time.deltaTime, 0);
+
+        public bool IsReady => _timesUp <= Time.time;
     }
 }

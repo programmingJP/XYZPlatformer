@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace PixelCrew.Utils.Disposables
 {
@@ -10,7 +10,7 @@ namespace PixelCrew.Utils.Disposables
         {
             _onDispose = onDispose;
         }
-        
+
         public void Dispose()
         {
             _onDispose?.Invoke();

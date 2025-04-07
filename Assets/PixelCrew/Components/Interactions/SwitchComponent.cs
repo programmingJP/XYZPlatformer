@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace PixelCrew.Components.Interactions
+namespace PixelCrew.Components
 {
     public class SwitchComponent : MonoBehaviour
     {
@@ -10,7 +10,7 @@ namespace PixelCrew.Components.Interactions
 
         public void Switch()
         {
-            _state = !_state; 
+            _state = !_state;
             _animator.SetBool(_animationKey, _state);
         }
 

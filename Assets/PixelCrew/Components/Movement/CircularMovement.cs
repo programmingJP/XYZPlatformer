@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PixelCrew.Components.Movement
 {
@@ -6,9 +6,8 @@ namespace PixelCrew.Components.Movement
     {
         [SerializeField] private float _radius = 1f;
         [SerializeField] private float _speed = 1f;
-
         private Rigidbody2D[] _bodies;
-        private Vector2[] _position;
+        private Vector2[] _positions;
         private float _time;
 
         private void Awake()
@@ -19,18 +18,18 @@ namespace PixelCrew.Components.Movement
         private void UpdateContent()
         {
             _bodies = GetComponentsInChildren<Rigidbody2D>();
-            _position = new Vector2[_bodies.Length];
+            _positions = new Vector2[_bodies.Length];
         }
 
         private void Update()
         {
             CalculatePositions();
             var isAllDead = true;
-            for (int i = 0; i < _bodies.Length; i++)
+            for (var i = 0; i < _bodies.Length; i++)
             {
                 if (_bodies[i])
                 {
-                    _bodies[i].MovePosition(_position[i]);
+                    _bodies[i].MovePosition(_positions[i]);
                     isAllDead = false;
                 }
             }
@@ -40,7 +39,7 @@ namespace PixelCrew.Components.Movement
                 enabled = false;
                 Destroy(gameObject, 1f);
             }
-            
+
             _time += Time.deltaTime;
         }
 
@@ -49,7 +48,6 @@ namespace PixelCrew.Components.Movement
             var step = 2 * Mathf.PI / _bodies.Length;
 
             Vector2 containerPosition = transform.position;
-
             for (var i = 0; i < _bodies.Length; i++)
             {
                 var angle = step * i;
@@ -57,8 +55,7 @@ namespace PixelCrew.Components.Movement
                     Mathf.Cos(angle + _time * _speed) * _radius,
                     Mathf.Sin(angle + _time * _speed) * _radius
                 );
-                _position[i] = containerPosition + pos;
-                //_bodies[i].MovePosition(containerPosition + pos);
+                _positions[i] = containerPosition + pos;
             }
         }
 
@@ -67,9 +64,9 @@ namespace PixelCrew.Components.Movement
         {
             UpdateContent();
             CalculatePositions();
-            for (int i = 0; i < _bodies.Length; i++)
+            for (var i = 0; i < _bodies.Length; i++)
             {
-                _bodies[i].transform.position = _position[i];
+                _bodies[i].transform.position = _positions[i];
             }
         }
 

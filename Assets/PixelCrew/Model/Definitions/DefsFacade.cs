@@ -1,23 +1,25 @@
-﻿using UnityEngine;
+using PixelCrew.Model.Definitions.Repositories;
+using PixelCrew.Model.Definitions.Repositories.Items;
+using UnityEngine;
 
 namespace PixelCrew.Model.Definitions
 {
-    [CreateAssetMenu (menuName = "Defs/DefsFacade", fileName = "DefsFacade")]
+    [CreateAssetMenu(menuName = "Defs/DefsFacade", fileName = "DefsFacade")]
     public class DefsFacade : ScriptableObject
     {
-        //передаем ссылки на наши обьекты
-        [SerializeField] private InventoryItemsDef _items;
-        [SerializeField] private ThrowableItemsDef _throwableitems;
+        [SerializeField] private ItemsRepository _items;
+        [SerializeField] private ThrowableRepository _throwableItems;
+        [SerializeField] private PotionRepository _potions;
+        [SerializeField] private PerkRepository _perks;
         [SerializeField] private PlayerDef _player;
 
-        public InventoryItemsDef Items => _items;
-        public ThrowableItemsDef Throwable => _throwableitems;
+        public ItemsRepository Items => _items;
+        public ThrowableRepository Throwable => _throwableItems;
+        public PotionRepository Potions => _potions;
+        public PerkRepository Perks => _perks;
         public PlayerDef Player => _player;
 
         private static DefsFacade _instance;
-        /// <summary>
-        /// мы проверяем равен ли инстанс налл если да, то мы загружаем дефс, иначе создаем инстанс
-        /// </summary>
         public static DefsFacade I => _instance == null ? LoadDefs() : _instance;
 
         private static DefsFacade LoadDefs()

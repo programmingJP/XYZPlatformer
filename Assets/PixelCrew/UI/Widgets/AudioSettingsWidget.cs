@@ -1,4 +1,4 @@
-﻿using PixelCrew.Model.Data.Properties;
+using PixelCrew.Model.Data.Properties;
 using PixelCrew.Utils.Disposables;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +18,7 @@ namespace PixelCrew.UI.Widgets
         {
             _trash.Retain(_slider.onValueChanged.Subscribe(OnSliderValueChanged));
         }
-        
+
         public void SetModel(FloatPersistentProperty model)
         {
             _model = model;
@@ -35,7 +35,7 @@ namespace PixelCrew.UI.Widgets
         {
             var textValue = Mathf.Round(newValue * 100);
             _value.text = textValue.ToString();
-            
+
             _slider.normalizedValue = newValue;
         }
 

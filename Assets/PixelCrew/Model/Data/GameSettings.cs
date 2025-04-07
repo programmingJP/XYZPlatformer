@@ -1,4 +1,4 @@
-﻿using PixelCrew.Model.Data.Properties;
+using PixelCrew.Model.Data.Properties;
 using UnityEngine;
 
 namespace PixelCrew.Model.Data
@@ -22,20 +22,14 @@ namespace PixelCrew.Model.Data
 
         private void OnEnable()
         {
-            /*//нам нужно сохранить настройки в постоянную память
-            //для этого мы воспользуемся PlayerPrefs
-            //1 параметр ключ, второй значение, таким образом мы сохраняем их в постоянную память
-            PlayerPrefs.SetFloat("music", 20f);
-            PlayerPrefs.Save();*/
-            
-            _music = new FloatPersistentProperty(1,SoundSetting.Music.ToString());
-            _sfx = new FloatPersistentProperty(1,SoundSetting.Sfx.ToString());
+            _music = new FloatPersistentProperty(1, SoundSetting.Music.ToString());
+            _sfx = new FloatPersistentProperty(1, SoundSetting.Sfx.ToString());
         }
 
         private void OnValidate()
         {
-            _music.Validate();
-            _sfx.Validate();
+            Music.Validate();
+            Sfx.Validate();
         }
     }
 

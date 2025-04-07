@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PixelCrew.Utils.Disposables;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace PixelCrew.Model.Data.Properties
     public class ObservableProperty<TPropertyType>
     {
         [SerializeField] protected TPropertyType _value;
-        
+
         public delegate void OnPropertyChanged(TPropertyType newValue, TPropertyType oldValue);
 
         public event OnPropertyChanged OnChanged;
@@ -18,7 +18,7 @@ namespace PixelCrew.Model.Data.Properties
             OnChanged += call;
             return new ActionDisposable(() => OnChanged -= call);
         }
-        
+
         public IDisposable SubscribeAndInvoke(OnPropertyChanged call)
         {
             OnChanged += call;
@@ -32,16 +32,15 @@ namespace PixelCrew.Model.Data.Properties
             get => _value;
             set
             {
-                var isSame = _value.Equals(value);
-                if(isSame) return;
+                var isSame = _value?.Equals(value) ?? false;
+                if (isSame) return;
                 var oldValue = _value;
-
                 _value = value;
-                InvokeOnChangedEvent(_value, oldValue);
+                InvokeChangedEvent(_value, oldValue);
             }
         }
 
-        protected void InvokeOnChangedEvent(TPropertyType newValue, TPropertyType oldValue)
+        protected void InvokeChangedEvent(TPropertyType newValue, TPropertyType oldValue)
         {
             OnChanged?.Invoke(newValue, oldValue);
         }

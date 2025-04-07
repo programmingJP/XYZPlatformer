@@ -1,4 +1,4 @@
-﻿using PixelCrew.Model.Data;
+using PixelCrew.Model.Data;
 using PixelCrew.UI.Widgets;
 using UnityEngine;
 
@@ -8,6 +8,7 @@ namespace PixelCrew.UI.Settings
     {
         [SerializeField] private AudioSettingsWidget _music;
         [SerializeField] private AudioSettingsWidget _sfx;
+
         protected override void Start()
         {
             base.Start();

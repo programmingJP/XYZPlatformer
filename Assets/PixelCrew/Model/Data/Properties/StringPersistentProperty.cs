@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PixelCrew.Model.Data.Properties
 {
@@ -11,7 +11,7 @@ namespace PixelCrew.Model.Data.Properties
 
         protected override void Write(string value)
         {
-            PlayerPrefs.SetString(Key, Value);
+            PlayerPrefs.SetString(Key, value);
         }
 
         protected override string Read(string defaultValue)

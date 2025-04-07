@@ -4,15 +4,14 @@ namespace PixelCrew.Components.Health
 {
     public class ModifyHealthComponent : MonoBehaviour
     {
-        [SerializeField] private int _hpDelta; //дельта здоровья
+        [SerializeField] private int _hpDelta;
 
         public void Apply(GameObject target)
         {
-            var healthComponent = target.GetComponent<HealthComponent>(); //получаем компонент здоровья
-
-            if (healthComponent != null) //если компонент существует
+            var healthComponent = target.GetComponent<HealthComponent>();
+            if (healthComponent != null)
             {
-                healthComponent.ModifyHealth(_hpDelta); //применяем модификацию дельты здоровья
+                healthComponent.ModifyHealth(_hpDelta);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PixelCrew.Utils
 {
@@ -11,8 +11,7 @@ namespace PixelCrew.Utils
             var container = GameObject.Find(ContainerName);
             if (container == null)
                 container = new GameObject(ContainerName);
-            
-            
+
             return Object.Instantiate(prefab, position, Quaternion.identity, container.transform);
         }
     }

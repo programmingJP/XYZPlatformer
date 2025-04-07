@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c53a08839e1475f97645b354c782260, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c5124bb6d804b82a62b0f7b913345cd, type: 3}
   m_Name: DefsFacade
   m_EditorClassIdentifier: 
-  _items: {fileID: 11400000, guid: 3ae2286743974134d95f38888c5d76b2, type: 2}
-  _throwableitems: {fileID: 11400000, guid: 38dc80a1fb87e834e8e67b34eae25c0d, type: 2}
-  _player: {fileID: 11400000, guid: 35c0a85117b758542867a9e74e5a649f, type: 2}
+  _items: {fileID: 11400000, guid: ad1c6371bf6e84fff80ed1a87c8cca03, type: 2}
+  _throwableItems: {fileID: 11400000, guid: 82078209847ad4e319c559e5397baf30, type: 2}
+  _potions: {fileID: 11400000, guid: d1809f5cac33246328645c176bf9cd88, type: 2}
+  _perks: {fileID: 11400000, guid: 0c23c9a1f81474037adfff2467ed5816, type: 2}
+  _player: {fileID: 11400000, guid: cde2059d6e46742198607a3bcd532b1d, type: 2}

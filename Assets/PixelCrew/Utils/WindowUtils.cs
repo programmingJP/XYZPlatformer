@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PixelCrew.Utils
 {
@@ -8,7 +8,7 @@ namespace PixelCrew.Utils
         {
             var window = Resources.Load<GameObject>(resourcePath);
             var canvas = Object.FindObjectOfType<Canvas>();
-            Object.Instantiate(window, canvas.transform); //так как мы не наследуемся от монобихевиара, инстантиэйт нам нужно вызывать через Обжект
+            Object.Instantiate(window, canvas.transform);
         }
     }
 }

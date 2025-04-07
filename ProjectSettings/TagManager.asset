@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - CutSceneCamera
+  - CutSceneAnimator
   - Interactable
   - SfxAudioSource
   layers:
@@ -24,7 +26,7 @@ TagManager:
   - Enemies
   - Collectables
   - Checkers
-  - CollidableEnemies
+  - ColladableEnemies
   - 
   - 
   - 
@@ -45,23 +47,20 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Background
-    uniqueID: 353391457
+    uniqueID: 3397822573
     locked: 0
-  - name: BackgroundDecoration
-    uniqueID: 4232649365
+  - name: DecorBack
+    uniqueID: 208726599
     locked: 0
   - name: TileMap
-    uniqueID: 3379441823
+    uniqueID: 53150097
     locked: 0
   - name: Level
-    uniqueID: 827176289
+    uniqueID: 518770257
     locked: 0
   - name: Props
-    uniqueID: 4037231571
+    uniqueID: 4254822923
     locked: 0
   - name: Creatures
-    uniqueID: 1872384659
-    locked: 0
-  - name: ForegroundDecoration
-    uniqueID: 1831491257
+    uniqueID: 3508346407
     locked: 0

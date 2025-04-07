@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using PixelCrew.Model;
 using PixelCrew.Model.Data;
@@ -16,15 +15,15 @@ namespace PixelCrew.UI.Hud.QuickInventory
         private readonly CompositeDisposable _trash = new CompositeDisposable();
 
         private GameSession _session;
-        private List<InventoryItemWidget> _createdItem = new List<InventoryItemWidget>(); //кешируем наши айтемы,для того чтобы постоянно не пересоздавать одни и те же элементы
+        private List<InventoryItemWidget> _createdItem = new List<InventoryItemWidget>();
 
         private DataGroup<InventoryItemData, InventoryItemWidget> _dataGroup;
+
         private void Start()
         {
             _dataGroup = new DataGroup<InventoryItemData, InventoryItemWidget>(_prefab, _container);
             _session = FindObjectOfType<GameSession>();
             _trash.Retain(_session.QuickInventory.Subscribe(Rebuild));
-
             Rebuild();
         }
 

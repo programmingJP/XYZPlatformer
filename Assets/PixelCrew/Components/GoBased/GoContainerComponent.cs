@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PixelCrew.Components.GoBased
 {
@@ -10,7 +10,7 @@ namespace PixelCrew.Components.GoBased
         [ContextMenu("Drop")]
         public void Drop()
         {
-            _onDrop?.Invoke(_gos);
+            _onDrop.Invoke(_gos);
         }
     }
 }

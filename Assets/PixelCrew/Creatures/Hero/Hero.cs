@@ -6,6 +6,8 @@ using PixelCrew.Components.Health;
 using PixelCrew.Model;
 using PixelCrew.Model.Data;
 using PixelCrew.Model.Definitions;
+using PixelCrew.Model.Definitions.Repositories;
+using PixelCrew.Model.Definitions.Repositories.Items;
 using PixelCrew.Utils;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -14,58 +16,36 @@ namespace PixelCrew.Creatures.Hero
 {
     public class Hero : Creature, ICanAddInInventory
     {
-        [SerializeField] private CheckCircleOverLap _interactionCheck;
-        [SerializeField] private LayerCheck _wallCheck;
-        
+        [SerializeField] private CheckCircleOverlap _interactionCheck;
+        [SerializeField] private ColliderCheck _wallCheck;
+
         [SerializeField] private float _slamDownVelocity;
-        //[SerializeField] private float _interactionRadius;
-
-
-        [SerializeField] private int _damageOnGroundSlam;
-
-        private HealthComponent _slamDamageModify;
-        
-        private bool _allowDoubleJump;
-
-        
         [SerializeField] private Cooldown _throwCooldown;
         [SerializeField] private AnimatorController _armed;
         [SerializeField] private AnimatorController _disarmed;
 
-        [Header("Super throw")]
-        [SerializeField] private Cooldown _superThrowCooldown;
+        [Header("Super throw")] [SerializeField]
+        private Cooldown _superThrowCooldown;
+
         [SerializeField] private int _superThrowParticles;
         [SerializeField] private float _superThrowDelay;
-
-        [Space] [Header("Particles")] 
         [SerializeField] private ProbabilityDropComponent _hitDrop;
         [SerializeField] private SpawnComponent _throwSpawner;
-        //[SerializeField] private ParticleSystem _hitParticles;
-        
-        
-        
-        //TODO DASH
-        [SerializeField] private float _dashDuration;
-        [SerializeField] private float _dashForce;
-        [SerializeField] private float _dashCooldown;
 
         private static readonly int ThrowKey = Animator.StringToHash("throw");
-        private static readonly int IsOnWall = UnityEngine.Animator.StringToHash("is-on-wall");
-        
-        //Cервисные переменные
-        private bool _isDashing;
-        private bool _canDash = true;
+        private static readonly int IsOnWall = Animator.StringToHash("is-on-wall");
 
+        private bool _allowDoubleJump;
         private bool _isOnWall;
         private bool _superThrow;
-        private float _defaultGravityScale;
 
         private GameSession _session;
         private HealthComponent _health;
+        private float _defaultGravityScale;
 
         private const string SwordId = "Sword";
-        private int SwordCount => _session.Data.Inventory.Count(SwordId);
         private int CoinsCount => _session.Data.Inventory.Count("Coin");
+        private int SwordCount => _session.Data.Inventory.Count(SwordId);
 
         private string SelectedItemId => _session.QuickInventory.SelectedItem.Id;
 
@@ -75,7 +55,7 @@ namespace PixelCrew.Creatures.Hero
             {
                 if (SelectedItemId == SwordId)
                     return SwordCount > 1;
-                
+
                 var def = DefsFacade.I.Items.Get(SelectedItemId);
                 return def.HasTag(ItemTag.Throwable);
             }
@@ -83,25 +63,18 @@ namespace PixelCrew.Creatures.Hero
 
         protected override void Awake()
         {
-            /*
-             * с помощью ключевого слова base вызываем метод Awake у родительского класса
-             * а потом дописываем и вызываем код непосредственно в классе наследнике
-             */
             base.Awake();
-            _slamDamageModify = GetComponent<HealthComponent>();
+
             _defaultGravityScale = Rigidbody.gravityScale;
         }
 
-        //Метод для обновления данных сессии по ХП игрока т.е сохраняем текущее здоровье игрока в сессию
-
-        private void Start() //вызываем в старте так как гейм сессион у нас забирается на эвейке
+        private void Start()
         {
-            _session = FindObjectOfType<GameSession>(); // записываем игровую сессию в переменную
-            _health = GetComponent<HealthComponent>();//получаем компонент здоровья
-
+            _session = FindObjectOfType<GameSession>();
+            _health = GetComponent<HealthComponent>();
             _session.Data.Inventory.OnChanged += OnInventoryChanged;
-            
-            _health.SetHealth(_session.Data.Hp.Value); //записываем текущее здоровье в компонент
+
+            _health.SetHealth(_session.Data.Hp.Value);
             UpdateHeroWeapon();
         }
 
@@ -115,23 +88,38 @@ namespace PixelCrew.Creatures.Hero
             if (id == SwordId)
                 UpdateHeroWeapon();
         }
-        
+
         public void OnHealthChanged(int currentHealth)
         {
             _session.Data.Hp.Value = currentHealth;
         }
 
-        
+        protected override void Update()
+        {
+            base.Update();
+
+            var moveToSameDirection = Direction.x * transform.lossyScale.x > 0;
+            if (_wallCheck.IsTouchingLayer && moveToSameDirection)
+            {
+                _isOnWall = true;
+                Rigidbody.gravityScale = 0;
+            }
+            else
+            {
+                _isOnWall = false;
+                Rigidbody.gravityScale = _defaultGravityScale;
+            }
+
+            Animator.SetBool(IsOnWall, _isOnWall);
+        }
 
         protected override float CalculateYVelocity()
         {
-            float yVelocity = Rigidbody.velocity.y; //получаем текущую скорость по y
-            
-            bool isJumpPressing = Direction.y > 0;
+            var isJumpPressing = Direction.y > 0;
 
             if (IsGrounded || _isOnWall)
             {
-                _allowDoubleJump = true; //если мы стоим на земле, то разрешаем двойной прыжок
+                _allowDoubleJump = true;
             }
 
             if (!isJumpPressing && _isOnWall)
@@ -141,40 +129,17 @@ namespace PixelCrew.Creatures.Hero
 
             return base.CalculateYVelocity();
         }
-        
-        
+
         protected override float CalculateJumpVelocity(float yVelocity)
         {
-            if (!IsGrounded &&_allowDoubleJump && !_isOnWall) //!_isOnWall запрещает прыгать когда мы на стене
+            if (!IsGrounded && _allowDoubleJump && _session.PerksModel.IsDoubleJumpSupported && !_isOnWall)
             {
                 _allowDoubleJump = false;
                 DoJumpVfx();
-                return _jumpForce;
+                return _jumpSpeed;
             }
-            
+
             return base.CalculateJumpVelocity(yVelocity);
-        }
-
-
-        protected override void Update()
-        {
-            base.Update();
-            
-            //Будем висеть на стене только в том случае, если будем в сторону нее двигаться
-            var moveToSameDirection = Direction.x * transform.lossyScale.x > 0;
-            if (_wallCheck.IsTouchingLayer && moveToSameDirection) //проверяем столкнулись ли мы с стеной
-            {
-                _isOnWall = true;
-                Rigidbody.gravityScale = 0; //если мы столкнулись с стеной, то мы не можем падать //выключили гравитацию
-            }
-
-            else
-            {
-                _isOnWall = false;
-                Rigidbody.gravityScale = _defaultGravityScale; //включили гравитацию
-            }
-            
-            Animator.SetBool(IsOnWall, _isOnWall);
         }
 
         public void AddInInventory(string id, int value)
@@ -193,7 +158,7 @@ namespace PixelCrew.Creatures.Hero
 
         private void SpawnCoins()
         {
-            var numCoinsToDispose = Mathf.Min(CoinsCount, 5); //передаем количество коинов которое есть и максимальное количество которое можем выкинуть
+            var numCoinsToDispose = Mathf.Min(CoinsCount, 5);
             _session.Data.Inventory.Remove("Coin", numCoinsToDispose);
 
             _hitDrop.SetCount(numCoinsToDispose);
@@ -207,64 +172,35 @@ namespace PixelCrew.Creatures.Hero
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            //если мы столкнулись с землей (проверяем слой)
             if (other.gameObject.IsInLayer(_groundLayer))
             {
                 var contact = other.contacts[0];
-                if (contact.relativeVelocity.y >= _slamDownVelocity) //.relativeVelocity - скорость относительно двух коллайдеров (т.е когда они столкнулись, мы можем понять с какой скоростью они столкнулись и понять какие у них были относительно друг другу скорости)
+                if (contact.relativeVelocity.y >= _slamDownVelocity)
                 {
                     _particles.Spawn("SlamDown");
                 }
             }
         }
 
-        //тут мы просто запускаем анимацию
         public override void Attack()
         {
             if (SwordCount <= 0) return;
 
             base.Attack();
         }
-        
-        
+
         private void UpdateHeroWeapon()
         {
-            var numSwords = _session.Data.Inventory.Count("Sword");
             Animator.runtimeAnimatorController = SwordCount > 0 ? _armed : _disarmed;
-        }
-
-        public void Dash()
-        {
-            if (!_canDash || _isDashing) return;
-            
-            if (!IsGrounded) StartCoroutine(PerformDash());
-
-        }
-
-        private IEnumerator PerformDash()
-        {
-            _canDash = false;
-            _isDashing = true;
-
-            float originalSpeed = _speed;
-            _speed = _dashForce;
-
-            yield return new WaitForSeconds(_dashDuration);
-
-            _speed = originalSpeed; 
-            _isDashing = false;
-
-            yield return new WaitForSeconds(_dashCooldown); 
-            _canDash = true;
         }
 
         public void OnDoThrow()
         {
-            if (_superThrow)
+            if (_superThrow && _session.PerksModel.IsSuperThrowSupported)
             {
                 var throwableCount = _session.Data.Inventory.Count(SelectedItemId);
                 var possibleCount = SelectedItemId == SwordId ? throwableCount - 1 : throwableCount;
-                
+
                 var numThrows = Mathf.Min(_superThrowParticles, possibleCount);
                 StartCoroutine(DoSuperThrow(numThrows));
             }
@@ -287,14 +223,13 @@ namespace PixelCrew.Creatures.Hero
 
         private void ThrowAndRemoveFromInventory()
         {
-            //Sounds.Play("Range");
-            
+            Sounds.Play("Range");
+
             var throwableId = _session.QuickInventory.SelectedItem.Id;
             var throwableDef = DefsFacade.I.Throwable.Get(throwableId);
             _throwSpawner.SetPrefab(throwableDef.Projectile);
             _throwSpawner.Spawn();
-            //_particles.Spawn("Throw");
-            
+
             _session.Data.Inventory.Remove(throwableId, 1);
         }
 
@@ -303,27 +238,58 @@ namespace PixelCrew.Creatures.Hero
             _superThrowCooldown.Reset();
         }
 
-        public void PerformThrowing()
+        public void UseInventory()
+        {
+            if (IsSelectedItem(ItemTag.Throwable))
+                PerformThrowing();
+            else if (IsSelectedItem(ItemTag.Potion))
+                UsePotion();
+        }
+
+        private void UsePotion()
+        {
+            var potion = DefsFacade.I.Potions.Get(SelectedItemId);
+
+            switch (potion.Effect)
+            {
+                case Effect.AddHp:
+                    _session.Data.Hp.Value += (int) potion.Value;
+                    break;
+                case Effect.SpeedUp:
+                    _speedUpCooldown.Value = _speedUpCooldown.TimeLasts + potion.Time;
+                    _additionalSpeed = Mathf.Max(potion.Value, _additionalSpeed);
+                    _speedUpCooldown.Reset();
+                    break;
+            }
+
+            _session.Data.Inventory.Remove(potion.Id, 1);
+        }
+
+        private readonly Cooldown _speedUpCooldown = new Cooldown();
+        private float _additionalSpeed;
+
+        protected override float CalculateSpeed()
+        {
+            if (_speedUpCooldown.IsReady)
+                _additionalSpeed = 0f;
+
+            return base.CalculateSpeed() + _additionalSpeed;
+        }
+
+        private bool IsSelectedItem(ItemTag tag)
+        {
+            return _session.QuickInventory.SelectedDef.HasTag(tag);
+        }
+
+        private void PerformThrowing()
         {
             if (!_throwCooldown.IsReady || !CanThrow) return;
 
             if (_superThrowCooldown.IsReady) _superThrow = true;
-            
+
             Animator.SetTrigger(ThrowKey);
             _throwCooldown.Reset();
         }
-
-        //TODO ИСПОЛЬЗОВАНИЕ ЗЕЛЬЯ
-        /*public void UsePotion()
-        {
-            var potionCount = _session.Data.Inventory.Count("HealthPotion"); //забираем текущие данные
-
-            if (potionCount > 0)
-            {
-                _health.ModifyHealth(3);
-                _session.Data.Inventory.Remove("HealthPotion", 1);
-            }
-        }*/
 
         public void NextItem()
         {

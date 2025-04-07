@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using UnityEngine;
+
 namespace PixelCrew.Creatures.Weapons
 {
     public class SinusoidalProjectile : BaseProjectile
