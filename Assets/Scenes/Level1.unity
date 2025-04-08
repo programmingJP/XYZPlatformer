@@ -576,8 +576,8 @@ MonoBehaviour:
   _data:
     _inventory:
       _inventory:
-      - Id: PearlProjectile
-        Value: 30
+      - Id: Coin
+        Value: 1000
       - Id: SmallHealthPotion
         Value: 1
       - Id: GreenGem
@@ -588,6 +588,8 @@ MonoBehaviour:
       _used:
         _value: 
       _unlocked: []
+    Levels:
+      _progress: []
   _defaultCheckPoint: level1-checkpoint1
 --- !u!4 &87809060
 Transform:
